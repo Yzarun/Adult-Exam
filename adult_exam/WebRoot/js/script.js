@@ -1248,7 +1248,7 @@ var App = function () {
 		           {name:'id',index: 'id',width: 20, hidden:true, searchoptions:{sopt:['eq']}}, 
 		           {name:'title',index: 'title',width: 100,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
 		           {name:'cont',index:'cont', width: 150,sortable: false,editable: true,edittype:'textarea',search: false},
-		           {name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}},//
+		           {name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
 		           {name:'managerName',index: 'managerName',width: 50,sortable: false, search: false}
 			],
 			rowNum: 10,
@@ -1265,7 +1265,7 @@ var App = function () {
 					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 			}
 		});
-		jQuery("#aboutTab").jqGrid('navGrid', "#aboutTabNav", {edit: true, add:true, del: true},
+		jQuery("#aboutTab").jqGrid('navGrid', "#aboutTabNav", {view:true, edit: true, add:true, del: true},
 				{
 				afterSubmit: function(xhr) {
 					var status = xhr.responseJSON.success;
@@ -1281,7 +1281,7 @@ var App = function () {
 					var status = xhr.responseJSON.success;
 					return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
 				}
-			}
+			},{closeAfterSearch:true}
 		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
@@ -1301,7 +1301,7 @@ var App = function () {
 				{name:'id',index: 'id',width: 20, hidden:true, searchoptions:{sopt:['eq']}}, 
 				{name:'title',index: 'title',width: 100,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
 				{name:'cont',index:'cont', width: 150,sortable: false,editable: true,edittype:'textarea', search: false},
-				{name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}},//
+				{name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
 				{name:'managerName',index: 'managerName',width: 50,sortable: false, search: false}
 				],
 				rowNum: 10,
@@ -1318,7 +1318,7 @@ var App = function () {
 						layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 				}
 		});
-		jQuery("#noticeTab").jqGrid('navGrid', "#noticeTabNav", {edit: true, add:true, del: true},
+		jQuery("#noticeTab").jqGrid('navGrid', "#noticeTabNav", {view:true, edit: true, add:true, del: true},
 				{
 					afterSubmit: function(xhr) {
 						var status = xhr.responseJSON.success;
@@ -1334,7 +1334,7 @@ var App = function () {
 						var status = xhr.responseJSON.success;
 						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
 					}
-				}
+				},{closeAfterSearch:true}
 		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
@@ -1353,7 +1353,7 @@ var App = function () {
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
 		           {name: 'id',index: 'id',width: 20, hidden:false, searchoptions:{sopt:['eq']}}, 
 		           {name: 'name',index: 'name',width: 80,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
-		           {name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}},//
+		           {name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
 		           {name: 'managerName',index: 'managerName',width: 50,sortable: false, search: false}, 
 		           {name: 'remark',index: 'remark',width: 150,sortable: false,editable: true,edittype:'textarea', search: false}
 			],
@@ -1371,7 +1371,7 @@ var App = function () {
 					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 			}
 		});
-		jQuery("#majorTab").jqGrid('navGrid', "#majorTabNav", {edit: true, add:true, del: true}, 
+		jQuery("#majorTab").jqGrid('navGrid', "#majorTabNav", {view:true, edit: true, add:true, del: true}, 
 				{
 					afterSubmit: function(xhr) {
 						var status = xhr.responseJSON.success;
@@ -1387,7 +1387,7 @@ var App = function () {
 						var status = xhr.responseJSON.success;
 						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
 					}
-				}
+				},{closeAfterSearch:true}
 		);
 		//jQuery("#majorTab").jqGrid('inlineNav', "#majorTabNav",{});
 		/* Add tooltips */
@@ -1411,7 +1411,7 @@ var App = function () {
 		           {name: 'name',index: 'name',width: 50,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
 		           {name: 'cont',index: 'cont',width: 80,searchoptions:{sopt:['cn']}}, 
 		           {name: 'status',index: 'status',width: 20,sortable: false, search: false}, 
-		           {name: 'applyTime',index: 'applyTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}},//
+		           {name: 'applyTime',index: 'applyTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
 		           {name: 'results',index: 'results',width: 150,sortable: false,editable: true, search: false}
 			],
 			rowNum: 10,
@@ -1428,7 +1428,14 @@ var App = function () {
 					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 			}
 		});
-		jQuery("#examineeTab").jqGrid('navGrid', "#examineeTabNav", {edit: true, add:false, del: false});
+		jQuery("#examineeTab").jqGrid('navGrid', "#examineeTabNav", {view:true, edit: true, add:false, del: false},
+				{
+					afterSubmit: function(xhr) {
+						var status = xhr.responseJSON.success;
+						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+					},closeAfterEdit: true
+				},{},{},{closeAfterSearch:true}
+		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
 	var handleJqgridExam = function () {
@@ -1447,9 +1454,9 @@ var App = function () {
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
 		           {name:'id',index: 'id',width: 20, hidden:false, searchoptions:{sopt:['eq']}}, 
 		           {name:'cont',index:'cont', width: 100,sortable: false,editable: true,editrules:{required: true},search: false},
-		           {name:'examTime',index: 'examTime',width: 50,editable: true, editrules:{required: true},searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}},
+		           {name:'examTime',index: 'examTime',width: 50,editable: true, editrules:{required: true},searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},
 		           {name:'majorId',index:'majorId', width: 50,sortable: false,editable: true, editrules:{required: true}, edittype:'select',editoptions:{value:majorData},stype:'select', searchoptions:{sopt:['eq'],value:majorData},formatter:function(cellvalue){return majorData[cellvalue];}},//},
-		           {name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}},//
+		           {name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
 		           {name:'managerName',index: 'managerName',width: 50,sortable: false, search: false}
 			],
 			rowNum: 10,
@@ -1466,7 +1473,7 @@ var App = function () {
 					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 			}
 		});
-		jQuery("#examTab").jqGrid('navGrid', "#examTabNav", {edit: true, add:true, del: true,
+		jQuery("#examTab").jqGrid('navGrid', "#examTabNav", {view:true, edit: true, add:true, del: true,
 					editfunc:function(rowid) {
 						$('#examTab').jqGrid('editGridRow', rowid, {
 							afterShowForm: function () {
@@ -1492,12 +1499,12 @@ var App = function () {
 							},closeAfterAdd: true
 						});
 					}
-				},{
+				},{},{},{
 					afterSubmit: function(xhr) {
 						var status = xhr.responseJSON.success;
 						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
 					}
-				}
+				},{closeAfterSearch:true}
 		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
@@ -1519,9 +1526,9 @@ var App = function () {
 					{name: 'email',index: 'email',width: 50,searchoptions:{sopt:['cn']}}, 
 					{name: 'name',index: 'name',width: 50, editable: true,searchoptions:{sopt:['cn']}}, 
 					{name: 'gender',index: 'gender',width: 20,editable: true, edittype:'select',editoptions:{value:'1:男;0:女'},stype:'select',searchoptions:{sopt:['eq'],value:'1:男;0:女'},formatter:function(cellvalue){return cellvalue==0?"女":(cellvalue==1?"男":"未知");}}, 
-					{name: 'birthdate',index: 'birthdate', width: 50, editable: true, editoptions:{dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}},formatter:function(cellvalue){return cellvalue ? (cellvalue.split(" "))[0] : "";}},//
+					{name: 'birthdate',index: 'birthdate', width: 50, editable: true, editoptions:{dataInit: function(e) {setTimeout(function(){laydate({elem:'#'+$(e).attr('id')});},2);}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {setTimeout(function(){laydate({elem:'#'+$(e).attr('id')});},2);}},formatter:function(cellvalue){return cellvalue ? (cellvalue.split(" "))[0] : "";}},//
 					{name: 'status',index: 'status',width: 20,editable: true, editrules:{required: true},edittype:'select',editoptions:{value:'1:启用;0:禁用'},searchoptions:{sopt:['eq']},formatter:function(cellvalue){return cellvalue==1?"启用":"禁用";}}, 
-					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}}
+					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}}
 		    ],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1537,13 +1544,13 @@ var App = function () {
 					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 			}
 		});
-		jQuery("#users0Tab").jqGrid('navGrid', "#users0TabNav", {add: false, edit: true, del:false}, 
+		jQuery("#users0Tab").jqGrid('navGrid', "#users0TabNav", {view:true, add: false, edit: true, del:false}, 
 				{
 					afterSubmit: function(xhr) {
 						var status = xhr.responseJSON.success;
 						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
 					},closeAfterEdit: true
-				}
+				},{closeAfterSearch:true}
 		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
@@ -1564,9 +1571,9 @@ var App = function () {
 					{name: 'username',index: 'username',width: 50, editable: true, searchoptions:{sopt:['cn']}}, 
 					{name: 'name',index: 'name',width: 50, editable: true,searchoptions:{sopt:['cn']}}, 
 					{name: 'gender',index: 'gender',width: 20,editable: true, edittype:'select',editoptions:{value:'1:男;0:女'},stype:'select',searchoptions:{sopt:['eq'],value:'1:男;0:女'},formatter:function(cellvalue){return cellvalue==0?"女":(cellvalue==1?"男":"未知");}}, 
-					{name: 'birthdate',index: 'birthdate', width: 50, editable: true, editoptions:{dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}},formatter:function(cellvalue){return cellvalue ? (cellvalue.split(" "))[0] : "";}},//
+					{name: 'birthdate',index: 'birthdate', width: 50, editable: true, editoptions:{dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD'});});}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD'});});}},formatter:function(cellvalue){return cellvalue ? (cellvalue.split(" "))[0] : "";}},//
 					{name: 'status',index: 'status',width: 20,editable: true, editrules:{required: true},edittype:'select',editoptions:{value:'1:启用;0:禁用'},searchoptions:{sopt:['eq']},formatter:function(cellvalue){return cellvalue==1?"启用":"禁用";}}, 
-					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).datepicker({dateFormat: "yy-mm-dd"});}}}
+					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}}
 				],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1582,7 +1589,7 @@ var App = function () {
 					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 			}
 		});
-		jQuery("#users1Tab").jqGrid('navGrid', "#users1TabNav", {edit: true, add:true, del: true}, 
+		jQuery("#users1Tab").jqGrid('navGrid', "#users1TabNav", {view:true, edit: true, add:true, del: true}, 
 				{
 					afterSubmit: function(xhr) {
 						var result = xhr.responseJSON;
@@ -1604,7 +1611,7 @@ var App = function () {
 						var status = xhr.responseJSON.success;
 						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
 					}
-				}
+				},{closeAfterSearch:true}//{multipleSearch : true}
 		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
