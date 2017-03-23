@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yz.dao.MajorDAO">
+	<select id="selectList" resultType="JSONObject" parameterType="map">
+		SELECT m.*,(SELECT u.username FROM _users u WHERE m.manager=u.id AND u.type=1) AS managerName 
+		FROM _major m WHERE 1=1
+			<if test="id != null">AND id = #{id}</if>
+			<if test="name != null">AND m.name LIKE '%${name}%'</if>
+			<if test="manager != null">AND m.manager = #{manager}</if>
+			<if test="createTime != null and searchOper == 'gt'">AND m.createTime >= #{createTime}</if>
+			<if test="createTime != null and searchOper == 'lt'"><![CDATA[ AND m.createTime <= #{createTime} ]]></if>
+	</select>
+	<insert id="insert" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO _major(name,createTime,manager,remark) 
+		VALUES(#{name},NOW(),#{manager},#{remark})
+	</insert>
+	
+	<update id="update" parameterType="map">
+		UPDATE _major SET id=id
+		<if test="name != null">,name = #{name}</if>
+		<if test="remark != null">,remark = #{remark}</if>
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="object">
+		DELETE FROM _major WHERE id = #{id} 
+	</delete>
+</mapper>

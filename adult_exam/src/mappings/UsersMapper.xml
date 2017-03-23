@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yz.dao.UsersDAO">
+	
+	<select id="selectList" resultType="JSONObject" parameterType="JSONObject">
+		SELECT * FROM _users WHERE 1=1
+			<if test="username != null and searchOper == null">AND username = #{username}</if>
+			<if test="name != null and searchOper == null">AND name = #{name}</if>
+			<if test="username != null and searchOper == 'cn'">AND username LIKE '%${username}%'</if>
+			<if test="name != null and searchOper == 'cn'">AND name LIKE '%${name}%'</if>
+			<if test="gender != null">AND gender = #{gender}</if>
+			<if test="email != null and searchOper == null">AND email = #{email}</if>
+			<if test="email != null and searchOper == 'cn'">AND email LIKE '%${email}%'</if>
+			<if test="password != null">AND password = #{password}</if>
+			<if test="type != null">AND type = #{type}</if>
+			<if test="status != null">AND status = #{status}</if>
+			<if test="id != null">AND id = #{id}</if>
+			<if test="createTime != null and searchOper == 'gt'">AND createTime >= #{createTime}</if>
+			<if test="createTime != null and searchOper == 'lt'"><![CDATA[ AND createTime <= #{createTime} ]]></if>
+			<if test="birthdate != null and searchOper == 'gt'">AND birthdate >= #{birthdate}</if>
+			<if test="birthdate != null and searchOper == 'lt'"><![CDATA[ AND birthdate <= #{birthdate} ]]></if>
+			<if test="plus == 0"> AND username != 'admin'</if>
+			<if test="plus == 1 and id != null"> AND id != #{id}</if>
+	</select>
+	
+	<insert id="insert" parameterType="JSONObject" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO _users(username,email,password,type,name,gender,birthdate,status,createTime) 
+		VALUES(#{username},#{email},#{password},#{type},#{name},#{gender},#{birthdate},1,NOW())
+	</insert>
+	
+	<update id="update" parameterType="JSONObject">
+		UPDATE _users SET id=id
+		<if test="name != null">,name = #{name}</if>
+		<if test="username != null">,username = #{username}</if>
+		<if test="gender != null">,gender = #{gender}</if>
+		<if test="birthdate != null">,birthdate = #{birthdate}</if>
+		<if test="status != null">,status = #{status}</if>
+		<if test="password != null">,password = #{password}</if>
+		WHERE id = #{id}
+	</update>
+	<select id="selectOne" parameterType="object" resultType="JSONObject">
+		SELECT * FROM _users WHERE id = #{id}
+	</select>
+	<delete id="delete" parameterType="object">
+		DELETE FROM _users WHERE id = #{id}
+	</delete>
+</mapper>

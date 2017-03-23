@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yz.dao.RegistrationDAO">
+	<select id="selectList" resultType="JSONObject" parameterType="map">
+		SELECT m.*,(SELECT u.username FROM _users u WHERE m.manager=u.id AND u.type=1) AS managerName 
+		FROM _registration m WHERE 1=1
+			<if test="id != null">AND id = #{id}</if>
+			<if test="examNum != null">AND m.examNum LIKE '%${examNum}%'</if>
+			<if test="manager != null">AND m.manager = #{manager}</if>
+			<if test="userId != null">AND m.userId = #{userId}</if>
+			<if test="examId != null">AND m.examId = #{examId}</if>
+			<if test="status != null">AND m.status = #{status}</if>
+			<if test="applyTime != null and searchOper == 'gt'">AND m.applyTime >= #{applyTime}</if>
+			<if test="applyTime != null and searchOper == 'lt'"><![CDATA[ AND m.applyTime <= #{applyTime} ]]></if>
+	</select>
+	<insert id="insert" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO _registration(applyTime,examNum,userId,examId,status,manager) 
+		VALUES(NOW(),#{examNum},#{userId},v#{examId},0,#{manager})
+	</insert>
+	
+	<update id="update" parameterType="map">
+		UPDATE _registration SET id=id
+		<if test="status != null">,status = #{status}</if>
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="object">
+		DELETE FROM _registration WHERE id = #{id} 
+	</delete>
+</mapper>

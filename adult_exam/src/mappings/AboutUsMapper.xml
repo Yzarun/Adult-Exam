@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yz.dao.AboutUsDAO">
+	<select id="selectList" resultType="JSONObject" parameterType="JSONObject">
+		SELECT *,(SELECT u.username FROM _users u WHERE _about_us.manager=u.id AND u.type=1) AS managerName 
+		FROM _about_us WHERE 1=1
+			<if test="title != null">AND title LIKE '%${title}%'</if>
+			<if test="type != null">AND type = #{type}</if>
+			<if test="id != null">AND id = #{id}</if>
+			<if test="createTime != null and searchOper == 'gt'">AND createTime >= #{createTime}</if>
+			<if test="createTime != null and searchOper == 'lt'"><![CDATA[ AND createTime <= #{createTime} ]]></if>
+	</select>
+	
+	<insert id="insert" parameterType="JSONObject" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO _about_us(title,cont,type,image,manager,createTime) 
+		VALUES(#{title},#{cont},#{type},#{image},#{manager},NOW())
+	</insert>
+	
+	<update id="update" parameterType="JSONObject">
+		UPDATE _about_us SET id=id
+		<if test="title != null">,title = #{title}</if>
+		<if test="cont != null">,cont = #{cont}</if>
+		<if test="image != null">,image = #{image}</if>
+		WHERE id = #{id}
+	</update>
+	<select id="selectOne" parameterType="object" resultType="JSONObject">
+		SELECT * FROM _about_us WHERE id = #{id}
+	</select>
+	<delete id="delete" parameterType="object">
+		DELETE FROM _about_us WHERE id = #{id}
+	</delete>
+</mapper>
