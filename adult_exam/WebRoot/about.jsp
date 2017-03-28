@@ -17,6 +17,7 @@
 	<!-- JQGRID -->
 	<script src="js/jqgrid/js/grid.locale-cn.js"></script>
 	<script src="js/jqgrid/js/jquery.jqGrid.min.js"></script>
+	<script src="js/jqgrid/ajaxfileupload.js"></script>
 	<!-- CUSTOM SCRIPT -->
 	<script src="js/script.js"></script>
 	<script src="js/layer/layer.js"></script>
@@ -51,11 +52,11 @@
 				<form class="form-horizontal ">
 					<div class="form-group">
 						<div class="col-md-12">
-							<textarea rows="6" cols="3" name="textarea"
+							<textarea rows="6" cols="3" id="cont"
 								class="autosize form-control"></textarea>
 						</div>
 					</div>
-					<button type="button" class="btn btn-success">确认</button>
+					<button type="button" class="btn btn-success" onclick="save();">确认</button>
 					&emsp;&emsp; <span class="alert alert-warning"><strong>提示！</strong>&emsp;修改、编辑之后，记得确认！</span>
 				</form>
 			</div>
@@ -73,5 +74,24 @@
     </div>
 </div>
 <script>
-
+	var save = function() {
+		$.ajax({
+			contentType : "application/json; charset=utf-8",
+			type : "post",
+			url : "back/saveAbout.do",
+			data : JSON.stringify({cont: $('#cont').val(),type:1}),
+			dataType : "json",
+			success : function(result) {
+				if (result.success)
+					layer.msg('操作成功',{icon:1,time:1000});
+				else layer.msg('操作失败',{icon:2,time:1000});;
+			},
+			error : function(xhr) {
+				if (xhr.responseText == "loseSession") {
+					layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "back_login.jsp";});
+				}
+			}
+		});
+		
+	};
 </script>

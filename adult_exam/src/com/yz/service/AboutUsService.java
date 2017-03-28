@@ -13,4 +13,6 @@ public interface AboutUsService {
 	public Result queryPage(JSONObject jsonObj);
 	
 	public Result delete(JSONObject jsonObj);
+	
+	public Result saveAbout(JSONObject jsonObj);
 }

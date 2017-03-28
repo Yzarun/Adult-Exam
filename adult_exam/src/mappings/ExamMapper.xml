@@ -11,16 +11,18 @@
 			<if test="createTime != null and searchOper == 'lt'"><![CDATA[ AND createTime <= #{createTime} ]]></if>
 			<if test="examTime != null and searchOper == 'gt'">AND examTime >= #{examTime}</if>
 			<if test="examTime != null and searchOper == 'lt'"><![CDATA[ AND examTime <= #{examTime} ]]></if>
+			<if test="major != null">AND majorId IN (SELECT id FROM _major WHERE name = #{major})</if>
 	</select>
 	
 	<insert id="insert" parameterType="JSONObject" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO _exam(examTime,cont,majorId,manager,createTime) 
-		VALUES(#{examTime},#{cont},#{majorId},#{manager},NOW())
+		INSERT INTO _exam(examTime,cont,address,majorId,manager,createTime) 
+		VALUES(#{examTime},#{cont},#{address},#{majorId},#{manager},NOW())
 	</insert>
 	
 	<update id="update" parameterType="JSONObject">
 		UPDATE _exam SET id=id
 		<if test="cont != null">,cont = #{cont}</if>
+		<if test="address != null">,address = #{address}</if>
 		WHERE id = #{id}
 	</update>
 	<select id="selectOne" parameterType="object" resultType="JSONObject">

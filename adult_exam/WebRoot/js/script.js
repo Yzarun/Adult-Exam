@@ -1232,6 +1232,20 @@ var App = function () {
 	/*-----------------------------------------------------------------------------------*/
 	/*	jqGrid
 	/*-----------------------------------------------------------------------------------*/
+	var ajaxFileUpload = function(id, fileId, type) {
+		$.ajaxFileUpload({
+            url: 'uploadFile.do?type=' + type + '&id=' + id,
+            secureuri: false,
+            fileElementId: fileId,
+            dataType: "text",
+            success: function(data) {
+            	var result = JSON.parse(data);
+            	console.info("上传图片结果……");
+            	console.info(result);
+                console.info(result.code);
+            }
+		 });
+	};
 	var handleJqgridAbout = function () {
 		jQuery("#aboutTab").jqGrid({
 			jsonReader: {
@@ -1242,14 +1256,15 @@ var App = function () {
 			datatype: "json",
 			height: 300,
 			loadui: "block",
-			colNames: ['编号', '标题', '内容详情', '创建时间', '创建者'],
+			colNames: ['编号', '标题', '内容详情', '创建时间', '创建者', '图片'],
 			colModel: [
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
 		           {name:'id',index: 'id',width: 20, hidden:true, searchoptions:{sopt:['eq']}}, 
 		           {name:'title',index: 'title',width: 100,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
 		           {name:'cont',index:'cont', width: 150,sortable: false,editable: true,edittype:'textarea',search: false},
-		           {name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
-		           {name:'managerName',index: 'managerName',width: 50,sortable: false, search: false}
+		           {name:'createTime',index: 'createTime',width: 80,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+		           {name:'managerName',index: 'managerName',width: 50,sortable: false, search: false},
+		           {name:'image',index:'image',sortable: false, search: false, editable: true, edittype:'file',editoptions:{enctype:"multipart/form-data"},formoptions:{elmsuffix:'（请上传图片文件）'}}
 			],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1267,8 +1282,9 @@ var App = function () {
 		});
 		jQuery("#aboutTab").jqGrid('navGrid', "#aboutTabNav", {view:true, edit: true, add:true, del: true},
 				{
-				afterSubmit: function(xhr) {
+				afterSubmit: function(xhr, data) {
 					var status = xhr.responseJSON.success;
+					ajaxFileUpload(data.id, 'image', 1);
 					return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
 				},closeAfterEdit: true
 			},{
@@ -1449,15 +1465,16 @@ var App = function () {
 			datatype: "json",
 			height: 300,
 			loadui: "block",
-			colNames: ['编号', '考试内容', '考试时间', '考试专业', '创建时间', '创建者'],
+			colNames: ['编号', '考试内容', '考试地点', '考试时间', '考试专业', '创建时间', '创建者'],
 			colModel: [
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
-		           {name:'id',index: 'id',width: 20, hidden:false, searchoptions:{sopt:['eq']}}, 
-		           {name:'cont',index:'cont', width: 100,sortable: false,editable: true,editrules:{required: true},search: false},
-		           {name:'examTime',index: 'examTime',width: 50,editable: true, editrules:{required: true},searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},
+		           {name:'id',index: 'id',width: 25, hidden:false, searchoptions:{sopt:['eq']}}, 
+		           {name:'cont',index:'cont', width: 80,sortable: false,editable: true,editrules:{required: true},search: false},
+		           {name:'address',index:'address', width: 80,sortable: false,editable: true,editrules:{required: true},search: false},
+		           {name:'examTime',index: 'examTime',width: 60,editable: true, editrules:{required: true},editoptions:{dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},
 		           {name:'majorId',index:'majorId', width: 50,sortable: false,editable: true, editrules:{required: true}, edittype:'select',editoptions:{value:majorData},stype:'select', searchoptions:{sopt:['eq'],value:majorData},formatter:function(cellvalue){return majorData[cellvalue];}},//},
-		           {name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
-		           {name:'managerName',index: 'managerName',width: 50,sortable: false, search: false}
+		           {name:'createTime',index: 'createTime',width: 60,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+		           {name:'managerName',index: 'managerName',width: 30,sortable: false, search: false}
 			],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1477,9 +1494,8 @@ var App = function () {
 					editfunc:function(rowid) {
 						$('#examTab').jqGrid('editGridRow', rowid, {
 							afterShowForm: function () {
-								$('#examTime').attr('readonly', true);
-								$("#examTime").unbind("focus");
-								$('#majorId').attr('readOnly', true);
+								$('#examTime').attr('disabled', true);
+								$('#majorId').attr('disabled', true);
 							},
 							afterSubmit: function(xhr) {
 								var status = xhr.responseJSON.success;
@@ -1490,8 +1506,8 @@ var App = function () {
 					addfunc:function(rowid) {
 						$('#examTab').jqGrid('editGridRow', 'new', {
 							afterShowForm: function () {
-								$('#majorId').attr('readonly', false);
-								$('#examTime').focus(function() {laydate({format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});
+								$('#examTime').attr('disabled', false);
+								$('#majorId').attr('disabled', false);
 							},
 							afterSubmit: function(xhr) {
 								var status = xhr.responseJSON.success;

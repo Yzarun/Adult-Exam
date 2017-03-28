@@ -508,10 +508,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="divide20"></div>
 							<div class="list-group exam-info">
 						      <a href="javascript:;" class="list-group-item">
-						        <h4 class="list-group-item-heading">考试课程</h4>
-						        <p class="list-group-item-text">考场：xxxxxxx</p>
 						        <p class="list-group-item-text">时间：xxxxxxx</p>
-						        <p class="list-group-item-text">注意事项：xxxxxxx</p>
+						        <p class="list-group-item-text">内容：xxxxxxx</p>
+						        <p class="list-group-item-text">地点：xxxxxxx</p>
 						      </a>
 						      <a href="javascript:;" class="list-group-item">
 						        <h4 class="list-group-item-heading">考试课程</h4>
@@ -600,13 +599,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <!--/page -->
     <!-- javascripts -->
     <!-- placed at the end of the document so the pages load faster -->
-    <script src="front/js/jquery-1.9.1.min.js"></script>
+    <script src="js/jquery/jquery-2.0.3.min.js"></script>
     <script src="front/bootstrap-dist/js/bootstrap.min.js"></script>
     <script src="front/js/waypoint/waypoints.min.js"></script>
-    <script src="front/js/navmaster/jquery.scrollto.js"></script>
+    <script src="front/js/navmaster/jquery.scrollTo.js"></script>
     <script src="front/js/navmaster/jquery.nav.js"></script>
     <script src="front/js/isotope/jquery.isotope.min.js"></script>
-    <script src="front/js/isotope/imagesloaded.pkgd.min.min.js"></script>
+    <script src="front/js/isotope/imagesloaded.pkgd.min.js"></script>
     <!-- colorbox -->
     <script src="front/js/colorbox/jquery.colorbox.min.js"></script>
     <script src="front/js/script.non-min.js"></script>
@@ -614,16 +613,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script src="js/layer/laydate/laydate.js"></script>
     <script src="js/jquery.serializeJSON.js"></script>
     <script>
-	    $('.list-group.exam-info a').click(function () {
-	    	 $(this).attr("class","list-group-item active");
-	         $(this).siblings().attr("class","list-group-item");
-		});
-	    
+   		var majorArr = $.ajax({url:"getMajors.do",async:false}).responseJSON;
+   		var html = "";
+   		for(var key in majorArr)
+   			  html += "<li><a href='javascript:;'>" + majorArr[key] + "</a></li>";
+   		$("#majorQueryList").empty();
+   		$("#majorQueryList").append(html);
+   		$("#majorRegList").empty();
+   		$("#majorRegList").append(html);
+    
 	    $("#majorQueryList").find("a").click(function() {
 	    	$("#major").val($(this).text());
 	    });
 	    $("#majorRegList").find("a").click(function() {
-	    	$("#regMajorName").text($(this).text());
+	    	var major = $(this).text();
+	    	$("#regMajorName").text(major);
+	    	$.ajax({
+				contentType : "application/json; charset=utf-8",
+				type : "post",
+				async:false,
+				url : "handler/getExams.do",
+				data : JSON.stringify({major: major}),
+				dataType : "json",
+				success : function(result) {
+					if (result.success) {
+						var examArr = result.data;
+						var examHtml = "";
+						for(var i = 0; i < examArr.length; i++) {
+							examHtml += "<a href='javascript:;' class='list-group-item'>";
+							examHtml += "<p class='list-group-item-text'>时间：" + examArr[i]['examTime'] + "</p>";
+							examHtml += "<p class='list-group-item-text'>内容：" + examArr[i]['cont'] + "</p>";
+							examHtml += "<p class='list-group-item-text'>地点：" + (examArr[i]['address'] == undefined ? '无': examArr[i]['address']) + "</p>";
+							examHtml += "</a>";
+						}
+						$('.list-group.exam-info').empty();
+						$('.list-group.exam-info').append(examHtml);
+						
+						$('.list-group.exam-info a').click(function () {
+					    	 $(this).attr("class","list-group-item active");
+					         $(this).siblings().attr("class","list-group-item");
+						});
+					}
+				}
+	    	});
 	    });
 	    
 	    var logout = function() {

@@ -1,5 +1,8 @@
 package com.yz.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import sun.misc.JavaSecurityProtectionDomainAccess;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -86,7 +93,13 @@ public class HandlerController {
 			case "front#updatePass":
 				res = usersService.updatePass(jsonObj);
 				break;
-		
+			case "back#saveAbout":
+				jsonObj.put("manager", ((JSONObject) request.getSession().getAttribute("backUser")).get("id"));
+				res = aboutUsService.saveAbout(jsonObj);
+				break;
+			case "handler#getExams":
+				res = examService.getList(jsonObj);
+				break;
 		}
 		long end = System.currentTimeMillis();
 		JSON result = res.toJSON();
@@ -119,6 +132,7 @@ public class HandlerController {
 		Result res = new Result();
 		switch (method) {
 		case "about":
+			jsonObj.put("type", 0);
 			res = aboutUsService.queryPage(jsonObj);
 			break;
 		case "notice":
@@ -152,18 +166,8 @@ public class HandlerController {
 	@ResponseBody
 	public JSON insertUpdateDelete(@PathVariable String method, String oper, HttpServletRequest request) {
 		Result res = new Result();
-		/*Class<?> clazz = null;
-		if("major".equals(method)) clazz = Major.class;
-		else if("users0".equals(method) || "users1".equals(method)) clazz = Users.class;
-		
-		JSONObject jsonObj = new JSONObject();
-		try {
-			jsonObj = Utilities.getEntityToJSON(request, clazz);
-		} catch (Exception e) {
-			log.error("### " + method + "转化成实体类失败！");
-			e.printStackTrace();
-		}*/
 		JSONObject jsonObj = Utilities.getReqJSONObject(request);
+		log.info("\n[insertUpdateDelete]请求参数：" + jsonObj);
 		jsonObj.put("manager", ((JSONObject) request.getSession().getAttribute("backUser")).get("id"));
 		if("add".equals(oper)) {
 			if("major".equals(method)) {
@@ -173,6 +177,7 @@ public class HandlerController {
 			} else if("notice".equals(method)) {
 				res = noticeService.insert(jsonObj);
 			} else if("about".equals(method)) {
+				jsonObj.put("type", 0);
 				res = aboutUsService.insert(jsonObj);
 			} else if("exam".equals(method)) {
 				res = examService.insert(jsonObj);
@@ -210,8 +215,28 @@ public class HandlerController {
 	
 	@RequestMapping(value = "getMajors")
 	@ResponseBody
-	public JSON execute() {
+	public JSON getMajors() {
 		return majorService.getList().dataToJSON();
 	}
 	
+	@RequestMapping(value = "uploadFile")
+	@ResponseBody
+	public String uploadFile(Long id, Integer type, MultipartFile image, HttpServletRequest request) {
+		Result res = new Result();
+		String savePath = request.getServletContext().getRealPath("/") + "uploadfile" + File.separator;
+		JSONObject param = new JSONObject();
+		System.out.println("id:" + id);
+		System.out.println("type:" + type);
+		System.out.println("image:" + image.getOriginalFilename());
+		param.put("id", id);
+		param.put("type", type);
+		if(type == 0) savePath += "avatar";
+		else if(type == 1) savePath += "aboutUs";
+		else if(type == 2) savePath += "major";
+		param.put("path", savePath);
+		log.info("\n uploadFile请求参数：" + param);
+		res = publicService.uploadImg(param, image);
+		System.out.println("res:"+res);
+		return res.toJSONString();
+	}
 }

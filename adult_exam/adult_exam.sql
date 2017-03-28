@@ -42,6 +42,7 @@ CREATE TABLE `_exam` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `examTime` datetime DEFAULT NULL,
   `cont` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
   `majorId` bigint(20) DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
   `manager` bigint(20) DEFAULT NULL,

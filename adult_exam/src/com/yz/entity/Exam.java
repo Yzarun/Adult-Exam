@@ -15,6 +15,8 @@ public class Exam extends CommonEntity implements Serializable {
 	 */
 	private String cont;
 	
+	private String address;
+	
 	private Long majorId;
 	
 	private Date createTime;
@@ -67,6 +69,14 @@ public class Exam extends CommonEntity implements Serializable {
 
 	public void setCont(String cont) {
 		this.cont = cont;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 }

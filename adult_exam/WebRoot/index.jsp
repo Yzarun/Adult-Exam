@@ -19,6 +19,7 @@
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <script src="js/jquery/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery/jquery-migrate-1.2.1.min.js"></script>
     <script src="js/jquery.serializeJSON.js"></script>
     <script src="js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="bootstrap-dist/js/bootstrap.min.js"></script>

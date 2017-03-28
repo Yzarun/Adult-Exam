@@ -75,4 +75,25 @@ public class AboutUsServiceImpl implements AboutUsService {
 		return result;
 	}
 
+	@Override
+	public Result saveAbout(JSONObject jsonObj) {
+		Result result = new Result();
+		try {
+			JSONObject param = new JSONObject();
+			param.put("type", 1);
+			List<JSONObject> list = aboutUsDAO.selectList(param);
+			if(list.isEmpty())
+				aboutUsDAO.insert(jsonObj);
+			else {
+				jsonObj.put("id", list.get(0).get("id"));
+				aboutUsDAO.update(jsonObj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMsg("系统内部错误");
+		}
+		return result;
+	}
+
 }

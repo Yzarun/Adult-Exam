@@ -61,12 +61,11 @@ public class PublicServiceImpl implements PublicService {
 	}
 
 	@Override
-	public Result uploadImg(JSONObject jsonObj) {
+	public Result uploadImg(JSONObject jsonObj, MultipartFile file) {
 		Result result = new Result();
 		try {
-			MultipartFile file = (MultipartFile) jsonObj.get("file");
 			String origName = file.getOriginalFilename();
-			String suffix = origName.substring(origName.lastIndexOf("."));
+			String suffix = origName.substring(origName.lastIndexOf(".") + 1);
 			String suffixList = "jpg,png,jpeg,bmp,gif";
 			if(suffixList.contains(suffix.toLowerCase()))
 				UploadFile.upload(jsonObj.getString("path"), file);
