@@ -36,6 +36,7 @@
 		<if test="birthdate != null">,birthdate = #{birthdate}</if>
 		<if test="status != null">,status = #{status}</if>
 		<if test="password != null">,password = #{password}</if>
+		<if test="image != null">,image = #{image}</if>
 		WHERE id = #{id}
 	</update>
 	<select id="selectOne" parameterType="object" resultType="JSONObject">

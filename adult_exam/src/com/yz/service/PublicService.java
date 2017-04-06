@@ -1,5 +1,7 @@
 package com.yz.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSONObject;
@@ -9,6 +11,6 @@ public interface PublicService {
 
 	public Result sendEmail(JSONObject jsonObj);
 	
-	public Result uploadImg(JSONObject jsonObj, MultipartFile file);
+	public Result uploadImg(MultipartFile file, HttpServletRequest request);
 	
 }

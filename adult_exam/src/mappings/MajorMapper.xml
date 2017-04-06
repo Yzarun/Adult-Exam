@@ -19,6 +19,7 @@
 		UPDATE _major SET id=id
 		<if test="name != null">,name = #{name}</if>
 		<if test="remark != null">,remark = #{remark}</if>
+		<if test="image != null">,image = #{image}</if>
 		WHERE id = #{id}
 	</update>
 	<delete id="delete" parameterType="object">

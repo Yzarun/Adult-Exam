@@ -11,6 +11,9 @@ var App = function () {
     	if($(elem).length > 0) return true;
     	else return false;
     };
+    var loginTips = function() {
+    	layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+    };
     
 	/*-----------------------------------------------------------------------------------*/
 	/*	Runs callback functions set by App.addResponsiveFunction()
@@ -1240,9 +1243,10 @@ var App = function () {
             dataType: "text",
             success: function(data) {
             	var result = JSON.parse(data);
-            	console.info("上传图片结果……");
-            	console.info(result);
-                console.info(result.code);
+            	if(result.code == "0005" || !result.success) {
+            		layer.closeAll();
+            		layer.alert(result.msg,{icon:5});
+            	}
             }
 		 });
 	};
@@ -1276,26 +1280,34 @@ var App = function () {
 			caption: "学院特色列表",
 			autowidth: true,
 			loadError: function(xhr) {
-				if(xhr.responseText == "loseSession") 
-					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+				if(xhr.responseText == "loseSession") loginTips();
 			}
 		});
 		jQuery("#aboutTab").jqGrid('navGrid', "#aboutTabNav", {view:true, edit: true, add:true, del: true},
 				{
 				afterSubmit: function(xhr, data) {
-					var status = xhr.responseJSON.success;
-					ajaxFileUpload(data.id, 'image', 1);
-					return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+					if(xhr.responseText == "loseSession") loginTips();
+					else {
+						var status = xhr.responseJSON.success;
+						ajaxFileUpload(data.id, 'image', 1);
+						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+					}
 				},closeAfterEdit: true
 			},{
 				afterSubmit: function(xhr) {
-					var status = xhr.responseJSON.success;
-					return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+					if(xhr.responseText == "loseSession") loginTips();
+					else {
+						var status = xhr.responseJSON.success;
+						return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+					}
 				},closeAfterAdd: true
 			},{
 				afterSubmit: function(xhr) {
-					var status = xhr.responseJSON.success;
-					return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+					if(xhr.responseText == "loseSession") loginTips();
+					else {
+						var status = xhr.responseJSON.success;
+						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+					}
 				}
 			},{closeAfterSearch:true}
 		);
@@ -1330,25 +1342,33 @@ var App = function () {
 				caption: "公告通知列表",
 				autowidth: true,
 				loadError: function(xhr) {
-					if(xhr.responseText == "loseSession") 
-						layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+					if(xhr.responseText == "loseSession") loginTips();
 				}
 		});
 		jQuery("#noticeTab").jqGrid('navGrid', "#noticeTabNav", {view:true, edit: true, add:true, del: true},
 				{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						}
 					},closeAfterEdit: true
 				},{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+						}
 					},closeAfterAdd: true
 				},{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						}
 					}
 				},{closeAfterSearch:true}
 		);
@@ -1383,25 +1403,33 @@ var App = function () {
 			caption: "专业信息列表",
 			autowidth: true,
 			loadError: function(xhr) {
-				if(xhr.responseText == "loseSession") 
-					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+				if(xhr.responseText == "loseSession") loginTips();
 			}
 		});
 		jQuery("#majorTab").jqGrid('navGrid', "#majorTabNav", {view:true, edit: true, add:true, del: true}, 
 				{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						}
 					},closeAfterEdit: true
 				},{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+						}
 					},closeAfterAdd: true
 				},{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						}
 					}
 				},{closeAfterSearch:true}
 		);
@@ -1440,15 +1468,17 @@ var App = function () {
 			caption: "考生信息列表",
 			autowidth: true,
 			loadError: function(xhr) {
-				if(xhr.responseText == "loseSession") 
-					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+				if(xhr.responseText == "loseSession") loginTips();
 			}
 		});
 		jQuery("#examineeTab").jqGrid('navGrid', "#examineeTabNav", {view:true, edit: true, add:false, del: false},
 				{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						}
 					},closeAfterEdit: true
 				},{},{},{closeAfterSearch:true}
 		);
@@ -1486,8 +1516,7 @@ var App = function () {
 			caption: "考试信息列表",
 			autowidth: true,
 			loadError: function(xhr) {
-				if(xhr.responseText == "loseSession") 
-					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+				if(xhr.responseText == "loseSession") loginTips();
 			}
 		});
 		jQuery("#examTab").jqGrid('navGrid', "#examTabNav", {view:true, edit: true, add:true, del: true,
@@ -1498,8 +1527,11 @@ var App = function () {
 								$('#majorId').attr('disabled', true);
 							},
 							afterSubmit: function(xhr) {
-								var status = xhr.responseJSON.success;
-								return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+								if(xhr.responseText == "loseSession") loginTips();
+								else {
+									var status = xhr.responseJSON.success;
+									return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+								}
 							},closeAfterEdit: true
 						});
 					},
@@ -1510,15 +1542,21 @@ var App = function () {
 								$('#majorId').attr('disabled', false);
 							},
 							afterSubmit: function(xhr) {
-								var status = xhr.responseJSON.success;
-								return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+								if(xhr.responseText == "loseSession") loginTips();
+								else {
+									var status = xhr.responseJSON.success;
+									return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
+								}
 							},closeAfterAdd: true
 						});
 					}
 				},{},{},{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						}
 					}
 				},{closeAfterSearch:true}
 		);
@@ -1556,15 +1594,17 @@ var App = function () {
 			caption: "平台用户信息列表",
 			autowidth: true,
 			loadError: function(xhr) {
-				if(xhr.responseText == "loseSession") 
-					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
-			}
+				if(xhr.responseText == "loseSession") loginTips();
+				}
 		});
 		jQuery("#users0Tab").jqGrid('navGrid', "#users0TabNav", {view:true, add: false, edit: true, del:false}, 
 				{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
+						}
 					},closeAfterEdit: true
 				},{closeAfterSearch:true}
 		);
@@ -1601,31 +1641,39 @@ var App = function () {
 			caption: "后台管理员信息列表",
 			autowidth: true,
 			loadError: function(xhr) {
-				if(xhr.responseText == "loseSession") 
-					layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+				if(xhr.responseText == "loseSession") loginTips();
 			}
 		});
 		jQuery("#users1Tab").jqGrid('navGrid', "#users1TabNav", {view:true, edit: true, add:true, del: true}, 
 				{
 					afterSubmit: function(xhr) {
-						var result = xhr.responseJSON;
-						if(result.success) {
-							if(result.code == "0000") return [true, layer.msg("修改成功",{icon:1,time:1000})];
-							else return [false, result.msg];
-						} else return [false, "修改失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var result = xhr.responseJSON;
+							if(result.success) {
+								if(result.code == "0000") return [true, layer.msg("修改成功",{icon:1,time:1000})];
+								else return [false, result.msg];
+							} else return [false, "修改失败"];
+						}
 					},closeAfterEdit: true
 				},{
 					afterSubmit: function(xhr) {
-						var result = xhr.responseJSON;
-						if(result.success) {
-							if(result.code == "0000") return [true, layer.msg("添加成功",{icon:1,time:1000})];
-							else return [false, result.msg];
-						} else return [false, "添加失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var result = xhr.responseJSON;
+							if(result.success) {
+								if(result.code == "0000") return [true, layer.msg("添加成功",{icon:1,time:1000})];
+								else return [false, result.msg];
+							} else return [false, "添加失败"];
+						}
 					},closeAfterAdd: true
 				},{
 					afterSubmit: function(xhr) {
-						var status = xhr.responseJSON.success;
-						return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						if(xhr.responseText == "loseSession") loginTips();
+						else {
+							var status = xhr.responseJSON.success;
+							return [status, status ? layer.msg("删除成功",{icon:1,time:1000}) : "删除失败"];
+						}
 					}
 				},{closeAfterSearch:true}//{multipleSearch : true}
 		);

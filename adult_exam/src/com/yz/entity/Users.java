@@ -34,6 +34,8 @@ public class Users extends CommonEntity implements Serializable {
 	 */
 	private Integer status;
 	
+	private String image;
+	
 	private Date createTime;
 
 	public Long getId() {
@@ -116,4 +118,12 @@ public class Users extends CommonEntity implements Serializable {
 		this.createTime = createTime;
 	}
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 }

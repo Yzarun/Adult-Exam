@@ -12,14 +12,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.yz.controller.HandlerController;
 import com.yz.util.ParameterRequestWrapper;
 
 public class SessionFilter extends OncePerRequestFilter {
 	private static Log log = LogFactory.getLog(SessionFilter.class);
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-		
 		ParameterRequestWrapper requestWrapper = new ParameterRequestWrapper(request);
 		String requestURL = request.getRequestURL().toString();
 		if(requestURL.contains("front") || requestURL.contains("back")) {

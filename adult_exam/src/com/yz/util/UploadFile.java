@@ -9,6 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadFile {
 	private static Log log = LogFactory.getLog(UploadFile.class);
 	
+	/**
+	 * 文件上传
+	 * @param path
+	 * @param file
+	 * @return 返回文件名
+	 */
 	public static String upload(String path, MultipartFile file) {
 		
 		String origName = file.getOriginalFilename();
@@ -22,6 +28,18 @@ public class UploadFile {
 			log.error("上传文件出错……");
 			e.printStackTrace();
 		}
-		return path + newName;
+		return newName;
+	}
+	
+	public static boolean deleteFile(String path) {
+		boolean flag = false;
+		try {
+			File file = new File(path);
+			if(file.exists() && file.isFile())
+				flag = file.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
 	}
 }

@@ -143,6 +143,7 @@ CREATE TABLE `_users` (
   `birthdate` date DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;

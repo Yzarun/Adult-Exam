@@ -221,22 +221,7 @@ public class HandlerController {
 	
 	@RequestMapping(value = "uploadFile")
 	@ResponseBody
-	public String uploadFile(Long id, Integer type, MultipartFile image, HttpServletRequest request) {
-		Result res = new Result();
-		String savePath = request.getServletContext().getRealPath("/") + "uploadfile" + File.separator;
-		JSONObject param = new JSONObject();
-		System.out.println("id:" + id);
-		System.out.println("type:" + type);
-		System.out.println("image:" + image.getOriginalFilename());
-		param.put("id", id);
-		param.put("type", type);
-		if(type == 0) savePath += "avatar";
-		else if(type == 1) savePath += "aboutUs";
-		else if(type == 2) savePath += "major";
-		param.put("path", savePath);
-		log.info("\n uploadFile请求参数：" + param);
-		res = publicService.uploadImg(param, image);
-		System.out.println("res:"+res);
-		return res.toJSONString();
+	public String uploadFile(MultipartFile image, HttpServletRequest request) {
+		return publicService.uploadImg(image, request).toJSONString();
 	}
 }
