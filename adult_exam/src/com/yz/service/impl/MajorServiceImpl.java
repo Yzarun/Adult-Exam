@@ -40,7 +40,8 @@ public class MajorServiceImpl implements MajorService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			result.setData(majorDAO.insert(jsonObj));
+			majorDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

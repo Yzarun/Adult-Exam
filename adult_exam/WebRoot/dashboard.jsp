@@ -7,7 +7,6 @@
     <!-- TODO -->
     <link rel="stylesheet" href="js/jquery-todo/css/styles.css" />
     <!-- FULL CALENDAR -->
-    <link rel="stylesheet" href="js/fullcalendar/fullcalendar.min.css" />
     <script src="js/bootstrap-daterangepicker/moment.min.js"></script>
     <script src="js/bootstrap-daterangepicker/daterangepicker.min.js"></script>
     <!-- SLIMSCROLL -->
@@ -24,20 +23,11 @@
     <script src="js/easypiechart/jquery.easypiechart.min.js"></script>
     <!-- FLOT CHARTS -->
     <script src="js/flot/jquery.flot.min.js"></script>
-    <script src="js/flot/jquery.flot.time.min.js"></script>
-    <script src="js/flot/jquery.flot.selection.min.js"></script>
-    <script src="js/flot/jquery.flot.resize.min.js"></script>
-    <script src="js/flot/jquery.flot.pie.min.js"></script>
-    <script src="js/flot/jquery.flot.stack.min.js"></script>
-    <script src="js/flot/jquery.flot.crosshair.min.js"></script>
     <!-- TODO -->
     <script src="js/jquery-todo/js/paddystodolist.js"></script>
     <!-- TIMEAGO -->
     <script src="js/timeago/jquery.timeago.min.js"></script>
-    <!-- FULL CALENDAR -->
-    <script src="js/fullcalendar/fullcalendar.min.js"></script>
-    <!-- CUSTOM SCRIPT -->
-    <script src="js/script.js"></script>
+    
 <div class="row">
     <div class="col-sm-12">
         <div class="page-header">

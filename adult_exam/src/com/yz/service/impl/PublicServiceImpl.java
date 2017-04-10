@@ -75,36 +75,38 @@ public class PublicServiceImpl implements PublicService {
 	public Result uploadImg(MultipartFile file, HttpServletRequest request) {
 		Result result = new Result();
 		try {
-			String origName = file.getOriginalFilename();
-			String suffix = origName.substring(origName.lastIndexOf(".") + 1);
-			String suffixList = "jpg,png,jpeg,bmp,gif";
-			if(suffixList.contains(suffix.toLowerCase())) {
-				String contextPath = request.getServletContext().getRealPath("/");
-				String savePath = "uploadfile" + File.separator;
-				
-				JSONObject param = Utilities.getReqJSONObject(request);
-				List<JSONObject> list = new ArrayList<JSONObject>();
-				Integer type = param.getInteger("type");
-				param.remove("type");
-				if(type == 0) {
-					list = usersDAO.selectList(param);
-					savePath += "avatar";
-				} else if(type == 1) {
-					list = aboutUsDAO.selectList(param);
-					savePath += "aboutUs";
-				} else if(type == 2) {
-					list = majorDAO.selectList(param);
-					savePath += "major";
+			if(!file.isEmpty()) {
+				String origName = file.getOriginalFilename();
+				String suffix = origName.substring(origName.lastIndexOf(".") + 1);
+				String suffixList = "jpg,png,jpeg,bmp,gif";
+				if(suffixList.contains(suffix.toLowerCase())) {
+					String contextPath = request.getServletContext().getRealPath("/");
+					String savePath = "uploadfile" + File.separator;
+					
+					JSONObject param = Utilities.getReqJSONObject(request);
+					List<JSONObject> list = new ArrayList<JSONObject>();
+					Integer type = param.getInteger("type");
+					param.remove("type");
+					if(type == 0) {
+						list = usersDAO.selectList(param);
+						savePath += "avatar";
+					} else if(type == 1) {
+						list = aboutUsDAO.selectList(param);
+						savePath += "aboutUs";
+					} else if(type == 2) {
+						list = majorDAO.selectList(param);
+						savePath += "major";
+					}
+					String fileName = UploadFile.upload(contextPath + savePath, file);
+					param.put("image", savePath + File.separator + fileName);
+					if(type == 0) usersDAO.update(param);
+					else if(type == 1) aboutUsDAO.update(param);
+					else if(type == 2) majorDAO.update(param);
+					if(!list.isEmpty() && list.get(0).get("image") != null) UploadFile.deleteFile(contextPath + list.get(0).getString("image"));
+				} else {
+					result.setCode("0005");
+					result.setMsg("上传文件格式不支持（支持jpg、png、jpeg、bmp、gif格式）");
 				}
-				String fileName = UploadFile.upload(contextPath + savePath, file);
-				param.put("image", savePath + File.separator + fileName);
-				if(type == 0) usersDAO.update(param);
-				else if(type == 1) aboutUsDAO.update(param);
-				else if(type == 2) majorDAO.update(param);
-				if(!list.isEmpty() && list.get(0).get("image") != null) UploadFile.deleteFile(contextPath + list.get(0).getString("image"));
-			} else {
-				result.setCode("0005");
-				result.setMsg("上传文件格式不支持（支持jpg、png、jpeg、bmp、gif格式）");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

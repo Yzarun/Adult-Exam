@@ -52,7 +52,8 @@ public class NoticeServiceImpl implements NoticeService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			result.setData(noticeDAO.insert(jsonObj));
+			noticeDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

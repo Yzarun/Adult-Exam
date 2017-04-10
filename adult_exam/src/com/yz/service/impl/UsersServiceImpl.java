@@ -54,7 +54,8 @@ public class UsersServiceImpl implements UsersService {
 		try {
 			jsonObj.put("password", MD5Util.encrypt(jsonObj.getString("password")));
 			jsonObj.put("type", 0);
-			result.setData(usersDAO.insert(jsonObj));
+			usersDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 			result.setMsg("注册成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -172,7 +173,8 @@ public class UsersServiceImpl implements UsersService {
 			}
 			jsonObj.put("password", MD5Util.encrypt("123456"));
 			jsonObj.put("type", 1);
-			result.setData(usersDAO.insert(jsonObj));
+			usersDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

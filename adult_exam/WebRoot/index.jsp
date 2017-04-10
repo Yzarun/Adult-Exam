@@ -26,6 +26,7 @@
     <script src="js/jQuery-Cookie/jquery.cookie.min.js"></script>
     <script src="js/layer/layer.js"></script>
     <script src="js/layer/laydate/laydate.js"></script>
+    <script src="js/script.js"></script>
 </head>
 <body>
     <!-- HEADER -->
@@ -234,15 +235,8 @@
     <!--/PAGE -->
 	<script>
 		$(function() {
-			if (${sessionScope.backUser == null}) {
-				layer.confirm("你还没有登录，请先登录", {
-					icon : 2,
-					title : "提示",
-					closeBtn : 0,
-					btn : [ '确定' ]
-				}, function() {
-					top.location.href = "back_login.jsp";
-				});
+			if ("${sessionScope.backUser.id}".length == 0) {
+				loginTips();
 				return false;
 			}
 			toPage("dashboard", "dashboard");

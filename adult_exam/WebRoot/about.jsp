@@ -18,8 +18,6 @@
 	<script src="js/jqgrid/js/grid.locale-cn.js"></script>
 	<script src="js/jqgrid/js/jquery.jqGrid.min.js"></script>
 	<script src="js/jqgrid/ajaxfileupload.js"></script>
-	<!-- CUSTOM SCRIPT -->
-	<script src="js/script.js"></script>
 	<script src="js/layer/layer.js"></script>
 <div class="row">
     <div class="col-sm-12">
@@ -74,6 +72,19 @@
     </div>
 </div>
 <script>
+
+	$(function() {
+		$.ajax({
+			contentType : "application/json; charset=utf-8",
+			type : "post",
+			url : "back/getAboutCont.do",
+			data : JSON.stringify({type:1}),
+			dataType : "json",
+			success : function(result) {
+				if (result.success) $('#cont').val(result.data);
+			}
+		});
+	});
 	var save = function() {
 		$.ajax({
 			contentType : "application/json; charset=utf-8",
@@ -84,14 +95,10 @@
 			success : function(result) {
 				if (result.success)
 					layer.msg('操作成功',{icon:1,time:1000});
-				else layer.msg('操作失败',{icon:2,time:1000});;
-			},
-			error : function(xhr) {
-				if (xhr.responseText == "loseSession") {
-					layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "back_login.jsp";});
-				}
+				else layer.msg('操作失败',{icon:2,time:1000});
+			}, error : function(xhr) {
+				if (xhr.responseText == "loseSession") loginTips();
 			}
 		});
-		
 	};
 </script>

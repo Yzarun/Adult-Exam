@@ -97,6 +97,9 @@ public class HandlerController {
 				jsonObj.put("manager", ((JSONObject) request.getSession().getAttribute("backUser")).get("id"));
 				res = aboutUsService.saveAbout(jsonObj);
 				break;
+			case "back#getAboutCont":
+				res = aboutUsService.getAbout(jsonObj);
+				break;
 			case "handler#getExams":
 				res = examService.getList(jsonObj);
 				break;

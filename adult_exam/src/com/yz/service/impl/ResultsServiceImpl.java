@@ -52,7 +52,8 @@ public class ResultsServiceImpl implements ResultsService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			result.setData(resultsDAO.insert(jsonObj));
+			resultsDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

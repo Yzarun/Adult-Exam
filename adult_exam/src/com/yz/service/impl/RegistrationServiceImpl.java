@@ -52,7 +52,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			result.setData(registrationDAO.insert(jsonObj));
+			registrationDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

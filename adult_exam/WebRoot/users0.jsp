@@ -17,8 +17,6 @@
 	<!-- JQGRID -->
 	<script src="js/jqgrid/js/grid.locale-cn.js"></script>
 	<script src="js/jqgrid/js/jquery.jqGrid.min.js"></script>
-	<!-- CUSTOM SCRIPT -->
-	<script src="js/script.js"></script>
 	<script src="js/layer/layer.js"></script>
 <div class="row">
     <div class="col-sm-12">

@@ -53,7 +53,8 @@ public class ExamServiceImpl implements ExamService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			result.setData(examDAO.insert(jsonObj));
+			examDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

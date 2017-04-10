@@ -53,7 +53,8 @@ public class AboutUsServiceImpl implements AboutUsService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			result.setData(aboutUsDAO.insert(jsonObj));
+			aboutUsDAO.insert(jsonObj);
+			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);
@@ -88,6 +89,21 @@ public class AboutUsServiceImpl implements AboutUsService {
 				jsonObj.put("id", list.get(0).get("id"));
 				aboutUsDAO.update(jsonObj);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMsg("系统内部错误");
+		}
+		return result;
+	}
+
+	@Override
+	public Result getAbout(JSONObject jsonObj) {
+		Result result = new Result();
+		try {
+			List<JSONObject> list = aboutUsDAO.selectList(jsonObj);
+			String cont = list.isEmpty() ? "" : list.get(0).getString("cont");
+			result.setData(cont);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

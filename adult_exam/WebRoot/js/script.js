@@ -1,3 +1,12 @@
+
+var elemIsExist = function(elem) {
+    	if($(elem).length > 0) return true;
+    	else return false;
+    };
+var loginTips = function() {
+	layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
+};
+
 var App = function () {
 
 	var currentPage = ''; // current page
@@ -7,14 +16,6 @@ var App = function () {
 	var is_fixed_header = false; //is fixed header activated
 	var responsiveFunctions = []; //responsive function holder
 	
-	var elemIsExist = function(elem) {
-    	if($(elem).length > 0) return true;
-    	else return false;
-    };
-    var loginTips = function() {
-    	layer.confirm("你还没有登录，请先登录",{icon:2,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
-    };
-    
 	/*-----------------------------------------------------------------------------------*/
 	/*	Runs callback functions set by App.addResponsiveFunction()
 	/*-----------------------------------------------------------------------------------*/
@@ -139,8 +140,6 @@ var App = function () {
 		/* Remove placeholder from Search Bar */
 		jQuery('.search').attr('placeholder', '');
 		collapsed = true;
-		/* Set a cookie so that mini-sidebar persists */
-		$.cookie('mini_sidebar', '1');
 	};
 	/*-----------------------------------------------------------------------------------*/
 	/*	Responsive Sidebar Collapse
@@ -172,14 +171,6 @@ var App = function () {
 	/*-----------------------------------------------------------------------------------*/
 	var handleSidebarCollapse = function () {
 		var viewport = getViewPort();
-        if ($.cookie('mini_sidebar') === '1') {
-			/* For Navbar */
-			jQuery('.navbar-brand').addClass("mini-menu");
-			/* For sidebar */
-			jQuery('#sidebar').addClass("mini-menu");
-			jQuery('#main-content').addClass("margin-left-50");
-			collapsed = true;
-        }
 		//Handle sidebar collapse on user interaction
 		jQuery('.sidebar-collapse').click(function () {
 			//Handle mobile sidebar toggle
@@ -194,7 +185,6 @@ var App = function () {
 						jQuery('#main-content').addClass("margin-top-100");
 					}
 					collapsed = false;
-					$.cookie('mini_sidebar', '0');
 				}
 				else {
 					jQuery('body').addClass("slidebar");
@@ -205,7 +195,6 @@ var App = function () {
 						jQuery('#main-content').removeClass("margin-top-100");
 					}
 					collapsed = true;
-					$.cookie('mini_sidebar', '1');
 					handleMobileSidebar();
 				}
 			}
@@ -225,7 +214,6 @@ var App = function () {
 					/* Add placeholder from Search Bar */
 					jQuery('.search').attr('placeholder', "Search");
 					collapsed = false;
-					$.cookie('mini_sidebar', '0');
 				}
 				else {
 					/* For Navbar */
@@ -238,7 +226,6 @@ var App = function () {
 					/* Remove placeholder from Search Bar */
 					jQuery('.search').attr('placeholder', '');
 					collapsed = true;
-					$.cookie('mini_sidebar', '1');
 				}
 				$("#main-content").on('resize', function (e) {
 					e.stopPropagation();
@@ -1298,6 +1285,7 @@ var App = function () {
 					if(xhr.responseText == "loseSession") loginTips();
 					else {
 						var status = xhr.responseJSON.success;
+						ajaxFileUpload(xhr.responseJSON.data, 'image', 1);
 						return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
 					}
 				},closeAfterAdd: true
@@ -3549,7 +3537,7 @@ var App = function () {
 				handleSparkline();		//Function to display Sparkline charts
 				handleDashFlotCharts(); //Function to display flot charts in dashboard
 				handleChat('chat-window'); //Function to handle chat
-				handleCalendar();	//Function to display calendar
+				//handleCalendar();	//Function to display calendar
 				//handleGritter();	//Function to display Gritter notifications
             }
 			if (App.isPage("widgets_box")) {
@@ -3761,6 +3749,7 @@ var App = function () {
                 }
             });
         },
+        
     };
     
 }();
