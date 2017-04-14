@@ -14,12 +14,11 @@ import com.alibaba.fastjson.serializer.SimpleDateFormatSerializer;
  *
  */
 public class Result {
-	private static SerializeConfig mapping = new SerializeConfig();  
-	private static String dateFormat;  
-	static {  
-	    dateFormat = "yyyy-MM-dd HH:mm:ss";  
-	    mapping.put(Date.class, new SimpleDateFormatSerializer(dateFormat));  
-	}  
+	
+	static {
+		new SerializeConfig().put(Date.class, new SimpleDateFormatSerializer("yyyy-MM-dd HH:mm:ss"));  
+	}
+	
 	/**
 	 * 成功状态，默认成功
 	 */
@@ -34,6 +33,7 @@ public class Result {
 	 * 0003 用户禁用
 	 * 0004 原始密码错误
 	 * 0005 上传文件格式不支持（支持jpg、png、jpeg、bmp、gif格式）
+	 * 0006 报名失败，该考试已报名
 	 */
 	private String code = "0000";
 	

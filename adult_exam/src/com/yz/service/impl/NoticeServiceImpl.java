@@ -75,4 +75,17 @@ public class NoticeServiceImpl implements NoticeService {
 		return result;
 	}
 
+	@Override
+	public Result getList(JSONObject jsonObj) {
+		Result result = new Result();
+		try {
+			result.setData(noticeDAO.selectList(jsonObj));
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMsg("系统内部错误");
+		}
+		return result;
+	}
+	
 }

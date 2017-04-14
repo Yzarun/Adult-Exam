@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yz.dao.ExamDAO;
 import com.yz.dao.ResultsDAO;
 import com.yz.service.ResultsService;
 import com.yz.util.Result;
@@ -17,6 +18,8 @@ public class ResultsServiceImpl implements ResultsService {
 
 	@Resource
 	ResultsDAO resultsDAO;
+	@Resource
+	ExamDAO examDAO;
 
 	@Override
 	public Result update(JSONObject jsonObj) {
@@ -67,6 +70,19 @@ public class ResultsServiceImpl implements ResultsService {
 		Result result = new Result();
 		try {
 			resultsDAO.delete(jsonObj.get("id"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMsg("系统内部错误");
+		}
+		return result;
+	}
+
+	@Override
+	public Result getResults(JSONObject jsonObj) {
+		Result result = new Result();
+		try {
+			result.setData(resultsDAO.selectResults(jsonObj));
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

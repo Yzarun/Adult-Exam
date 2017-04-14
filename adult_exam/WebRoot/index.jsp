@@ -19,12 +19,13 @@
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <script src="js/jquery/jquery-2.0.3.min.js"></script>
+    <script src="js/jqgrid/ajaxfileupload.js"></script>
     <script src="js/jquery/jquery-migrate-1.2.1.min.js"></script>
     <script src="js/jquery.serializeJSON.js"></script>
     <script src="js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="bootstrap-dist/js/bootstrap.min.js"></script>
     <script src="js/jQuery-Cookie/jquery.cookie.min.js"></script>
-    <script src="js/layer/layer.js"></script>
+	<script src="js/layer/layer.js"></script>
     <script src="js/layer/laydate/laydate.js"></script>
     <script src="js/script.js"></script>
 </head>
@@ -74,11 +75,11 @@
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <li class="dropdown user" id="header-user">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                        <img alt="" src="img/avatars/avatar2.jpg" /> <span class="username">${sessionScope.backUser.username}</span>
+                        <img id="avatarNav" alt="" src="img/avatars/avatar2.jpg" /> <span class="username">${sessionScope.backUser.username}</span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a data-toggle="modal" data-target="#adminModal" onclick="$('#adminForm')[0].reset()"><i class="fa fa-user"></i>&nbsp;&nbsp;个人信息</a></li>
+                        <li><a onclick="toUpdate();"><i class="fa fa-user"></i>&nbsp;&nbsp;个人信息</a></li>
                         <li><a data-toggle="modal" data-target="#passModal" onclick="$('#passForm')[0].reset()"><i class="fa fa-lock"></i>&nbsp;&nbsp;密码管理</a></li>
                         <li><a onclick="logout();"><i class="fa fa-power-off"></i>&nbsp;&nbsp;退出</a> </li>
                     </ul>
@@ -104,28 +105,33 @@
 				<div class="modal-body">
 					<form id="adminForm">
 						<input type="hidden" name="id" value="${sessionScope.backUser.id}">
+						<div class="form-group">
+							<label for="username">头像</label> 
+							<input type="file" id="image" name="image">
+							<img id="avatar" src="img/avatars/avatar2.jpg" class="img-thumbnail" width="120px">&emsp;
+							<button type="button" class="btn btn-primary btn-xs" style="vertical-align: bottom;" onclick="uploadAvatar();">
+								<span class="glyphicon glyphicon-upload"></span>上&emsp;传
+							</button>
+							<span class="help-block">[选择图片后，点击上传更换头像]</span>
+						</div>
 						<fieldset disabled>
 							<div class="form-group">
-								<label for="username">用户名</label> <input type="text" value="${sessionScope.backUser.username}"
+								<label for="username">用户名</label> <input type="text"
 									class="form-control" id="username" name="username" placeholder="用户名" readonly>
 							</div>
 							<div class="form-group">
-								<label for="name">姓名</label> <input type="text" value="${sessionScope.backUser.name}"
+								<label for="name">姓名</label> <input type="text"
 									class="form-control" id="name" name="name" placeholder="真实姓名">
 							</div>
 							<div class="form-group">
 								<label for="gender1">性别</label>
 								<div>
-									<label class="radio-inline"> <input type="radio" ${sessionScope.backUser.gender == 1 ? "checked" : ""}
-										name="gender" id="gender1" value="1"> 男
-									</label> 
-									<label class="radio-inline"> <input type="radio" ${sessionScope.backUser.gender == 0 ? "checked" : ""}
-										name="gender" value="0"> 女
-									</label>
+									<label class="radio-inline"> <input type="radio" name="gender" id="gender1" value="1"> 男</label> 
+									<label class="radio-inline"> <input type="radio" name="gender" value="0"> 女</label>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="birthdate">出生年月</label> <input type="text" value="${sessionScope.backUser.birthdate}"
+								<label for="birthdate">出生年月</label> <input type="text"
 									class="form-control" id="birthdate" name="birthdate" placeholder="出生年月" onfocus="laydate({format:'YYYY-MM-DD'});">
 							</div>
 						</fieldset>
@@ -240,6 +246,8 @@
 				return false;
 			}
 			toPage("dashboard", "dashboard");
+			
+			if(userInfo.image) $("#avatarNav").attr("src",userInfo.image);
 		});
 
 		var toPage = function(param1, param2) {
@@ -258,6 +266,15 @@
 			});
 		});
 
+		var toUpdate = function() {
+			$('#adminForm')[0].reset();
+			$("#adminModal").modal("show");
+			$("#username").val(userInfo.username);
+			$("#name").val(userInfo.name);
+			$("input[name='gender'][value=" + userInfo.gender + "]").attr("checked",true); 
+			$("#birthdate").val(userInfo.birthdate.split(" ")[0]);
+			if(userInfo.image) $("#avatar").attr("src", userInfo.image);
+		};
 		var operInfo = function(elem) {
 			if ($(elem).val() == "修改") {
 				$(elem).val("保存");
@@ -272,15 +289,14 @@
 					success : function(result) {
 						if (result.success) {
 							$("#adminModal").modal("hide");
-							location.reload();
-						} else
-							alert("修改信息失败");
+							userInfo = result.data;
+							layer.msg("修改资料成功",{icon:1,time:1500});
+							$(elem).val("修改");
+							$("#adminForm").find("fieldset").attr("disabled", true);
+						} else layer.msg("修改资料失败",{icon:2,time:1200});
 					},
 					error : function(xhr) {
-						if (xhr.responseText == "loseSession") {
-							alert("请先登录");
-							top.location.href = "back_login.jsp";
-						}
+						if (xhr.responseText == "loseSession") loginTips();
 					}
 				});
 
@@ -321,19 +337,58 @@
 					if (result.success)
 						if(result.code == "0000") {
 							$("#passModal").modal("hide");
-							alert("密码修改成功，请重新登录");
-							top.location.href = "back_login.jsp";
+							layer.confirm("密码修改成功，请重新登录",{icon:1,title:"提示",closeBtn:0,btn:['确定']},function() {top.location.href= "back_login.jsp";});
 						} else if(result.code == "0004") showWarn(result.msg);
 					else showWarn('密码修改失败！');
 				},
 				error : function(xhr) {
 					if (xhr.responseText == "loseSession") {
-						alert("请先登录");
-						top.location.href = "back_login.jsp";
+						loginTips();
 					}
 				}
 			});
 		};
+		var getUsersInfo = function() {
+			var info;
+			$.ajax({
+				contentType : "application/json; charset=utf-8",
+				async : false,
+				type : "post",
+				url : "handler/getUsers.do",
+				data : JSON.stringify({id: "${sessionScope.backUser.id}"}),
+				dataType : "json",
+				success : function(result) {
+					if (result.success) info = result.data;
+				}
+			});
+			return info;
+		};
+		var userInfo = getUsersInfo();
+		
+		var uploadAvatar = function() {
+			if($("#image").val().length == 0) {
+				layer.msg("请先选择图片",{icon:0,time:600});
+				return false;
+			}
+			$.ajaxFileUpload({
+	            url: 'uploadFile.do?type=0&id=${sessionScope.backUser.id}',
+	            secureuri: false,
+	            fileElementId: 'image',
+	            dataType: "text",
+	            success: function(data) {
+	            	var result = JSON.parse(data);
+	            	if(result.code == "0005" || !result.success) layer.alert(result.msg,{icon:5});
+	            	else {
+	            		var avatar = result.data.image;
+	            		$("#avatarNav").attr("src", avatar);
+	            		$("#avatar").attr("src", avatar);
+	            		userInfo.image = avatar;
+	            		layer.msg("头像更换成功",{icon:6,time:1500});
+	            	}
+	            }
+			 });
+		};
+		
 		var logout = function() {
 			$.ajax({
 				url : "logout.do?type=1",
@@ -344,5 +399,4 @@
 	</script>
 
 </body>
-
 </html>

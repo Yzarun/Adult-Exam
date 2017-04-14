@@ -11,6 +11,12 @@ public class Major extends CommonEntity implements Serializable {
 	
 	private String name;
 	
+	/**
+	 * 0  默认
+	 * 1  热门
+	 * 2  最新
+	 * 3  传统
+	 */
 	private Integer type;
 	
 	private String image;

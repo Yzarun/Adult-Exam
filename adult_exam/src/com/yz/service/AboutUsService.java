@@ -16,5 +16,7 @@ public interface AboutUsService {
 	
 	public Result saveAbout(JSONObject jsonObj);
 	
-	public Result getAbout(JSONObject jsonObj);
+	public Result getAbout1(JSONObject jsonObj);
+	
+	public Result getAbout0(JSONObject jsonObj);
 }

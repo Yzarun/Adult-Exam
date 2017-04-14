@@ -13,4 +13,6 @@ public interface ResultsService {
 	public Result queryPage(JSONObject jsonObj);
 	
 	public Result delete(JSONObject jsonObj);
+	
+	public Result getResults(JSONObject jsonObj);
 }

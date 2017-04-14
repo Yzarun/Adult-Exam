@@ -52,8 +52,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
-			registrationDAO.insert(jsonObj);
-			result.setData(jsonObj.get("id"));
+			if(!registrationDAO.selectList(jsonObj).isEmpty()) {
+				result.setCode("0006");
+				result.setMsg("报名失败，该考试已报名");
+			} else {
+				jsonObj.put("examNum", System.currentTimeMillis());
+				registrationDAO.insert(jsonObj);
+				result.setData(jsonObj.get("id"));
+				result.setMsg("报名申请成功！平台尽快为您处理，处理结果会发送至您的邮箱，请注意查收！");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setSuccess(false);

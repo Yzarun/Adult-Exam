@@ -87,13 +87,13 @@ public class PublicServiceImpl implements PublicService {
 					List<JSONObject> list = new ArrayList<JSONObject>();
 					Integer type = param.getInteger("type");
 					param.remove("type");
-					if(type == 0) {
+					if(type == 0) {//头像
 						list = usersDAO.selectList(param);
 						savePath += "avatar";
-					} else if(type == 1) {
+					} else if(type == 1) {//学院特色
 						list = aboutUsDAO.selectList(param);
 						savePath += "aboutUs";
-					} else if(type == 2) {
+					} else if(type == 2) {//专业
 						list = majorDAO.selectList(param);
 						savePath += "major";
 					}
@@ -103,6 +103,7 @@ public class PublicServiceImpl implements PublicService {
 					else if(type == 1) aboutUsDAO.update(param);
 					else if(type == 2) majorDAO.update(param);
 					if(!list.isEmpty() && list.get(0).get("image") != null) UploadFile.deleteFile(contextPath + list.get(0).getString("image"));
+					result.setData(param);
 				} else {
 					result.setCode("0005");
 					result.setMsg("上传文件格式不支持（支持jpg、png、jpeg、bmp、gif格式）");

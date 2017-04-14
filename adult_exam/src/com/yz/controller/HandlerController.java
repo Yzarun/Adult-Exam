@@ -1,8 +1,5 @@
 package com.yz.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,11 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import sun.misc.JavaSecurityProtectionDomainAccess;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,6 +20,8 @@ import com.yz.service.ExamService;
 import com.yz.service.MajorService;
 import com.yz.service.NoticeService;
 import com.yz.service.PublicService;
+import com.yz.service.RegistrationService;
+import com.yz.service.ResultsService;
 import com.yz.service.UsersService;
 import com.yz.util.Result;
 import com.yz.util.Utilities;
@@ -46,6 +43,10 @@ public class HandlerController {
 	AboutUsService aboutUsService;
 	@Resource
 	NoticeService noticeService;
+	@Resource
+	RegistrationService registrationService;
+	@Resource
+	ResultsService resultsService;
 	
 	@RequestMapping(value = "{model}/{method}")
 	@ResponseBody
@@ -75,10 +76,6 @@ public class HandlerController {
 				break;
 			case "back#updateUser":
 				res = usersService.update(jsonObj);
-				if("0000".equals(res.getCode())) {
-					JSONObject user = (JSONObject) res.getData();
-					request.getSession().setAttribute("backUser", user);
-				}
 				break;
 			case "front#updateUser":
 				res = usersService.update(jsonObj);
@@ -89,19 +86,30 @@ public class HandlerController {
 				break;
 			case "back#updatePass":
 				res = usersService.updatePass(jsonObj);
+				if("0000".equals(res.getCode())) request.getSession().removeAttribute("backUser");
 				break;
 			case "front#updatePass":
 				res = usersService.updatePass(jsonObj);
+				if("0000".equals(res.getCode())) request.getSession().removeAttribute("frontUser");
 				break;
 			case "back#saveAbout":
 				jsonObj.put("manager", ((JSONObject) request.getSession().getAttribute("backUser")).get("id"));
 				res = aboutUsService.saveAbout(jsonObj);
 				break;
 			case "back#getAboutCont":
-				res = aboutUsService.getAbout(jsonObj);
+				res = aboutUsService.getAbout1(jsonObj);
 				break;
 			case "handler#getExams":
 				res = examService.getList(jsonObj);
+				break;
+			case "handler#getUsers":
+				res = usersService.getInfo(jsonObj);
+				break;
+			case "front#regExam":
+				res = registrationService.insert(jsonObj);
+				break;
+			case "front#getResults":
+				res = resultsService.getResults(jsonObj);
 				break;
 		}
 		long end = System.currentTimeMillis();
@@ -145,7 +153,7 @@ public class HandlerController {
 			res = majorService.queryPage(jsonObj);
 			break;
 		case "examinee":
-			//res = majorService.queryPage(jsonObj);
+			res = registrationService.queryPage(jsonObj);
 			break;
 		case "exam":
 			res = examService.queryPage(jsonObj);
@@ -197,6 +205,8 @@ public class HandlerController {
 				res = aboutUsService.update(jsonObj);
 			} else if("exam".equals(method)) {
 				res = examService.update(jsonObj);
+			} else if("examinee".equals(method)) {
+				res = registrationService.update(jsonObj);
 			}
 			
 			
@@ -219,7 +229,7 @@ public class HandlerController {
 	@RequestMapping(value = "getMajors")
 	@ResponseBody
 	public JSON getMajors() {
-		return majorService.getList().dataToJSON();
+		return majorService.getMajorName().dataToJSON();
 	}
 	
 	@RequestMapping(value = "uploadFile")
@@ -227,4 +237,23 @@ public class HandlerController {
 	public String uploadFile(MultipartFile image, HttpServletRequest request) {
 		return publicService.uploadImg(image, request).toJSONString();
 	}
+	
+	@RequestMapping(value = "getHomeData")
+	@ResponseBody
+	public JSON getHomeData() {
+		JSONObject allData = new JSONObject();
+		JSONObject param = new JSONObject();
+		param.put("type", 1);
+		allData.put("aboutIntro", aboutUsService.getAbout1(param).getData());
+		param.put("type", 0);
+		allData.put("aboutFeat", aboutUsService.getAbout0(param).getData());
+		param.clear();
+		allData.put("majors", majorService.getList(param).getData());
+		allData.put("majorData", majorService.getMajorName().getData());
+		allData.put("notices", noticeService.getList(param).getData());
+		return allData;
+	}
+	
+	
+	
 }

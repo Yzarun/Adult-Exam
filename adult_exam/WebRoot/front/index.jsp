@@ -18,14 +18,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta name="author" content="">
     <link rel="stylesheet" href="front/css/cloud-admin-frontend.css">
     <link rel="stylesheet" href="front/font-awesome/css/font-awesome.min.css">
-    <!-- animate -->
     <link rel="stylesheet" href="front/css/amimatecss/animate.min.css">
-    <!-- colorbox -->
     <link rel="stylesheet" href="front/js/colorbox/colorbox.min.css" />
-    <!-- carousel -->
     <link rel="stylesheet" href="front/css/carousel.css">
-    <!-- fonts -->
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=open+sans:300,400,600'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
@@ -42,12 +38,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <a href="#notice" class="list-group-item">通知公告</a>
                 <a href="#result-view" class="list-group-item">成绩查询</a>
                 <a href="#register" class="list-group-item">考试报名</a>
-                <c:if test="${sessionScope.frontUser != null}">
+                <c:if test="${!empty sessionScope.frontUser}">
                 	<a href="#personal-center" class="list-group-item" style="text-transform: none;">${sessionScope.frontUser.username}，你好！</a>
                		<a href="javascript:;" onclick="logout();" class="list-group-item external" style="color: red;">[退出]</a>
                 </c:if>
-               	<c:if test="${sessionScope.frontUser == null}">
-                	<a href="front_login.jsp" class="list-group-item external">登录/注册 </a>
+               	<c:if test="${empty sessionScope.frontUser}">
+                	<a href="javascript:;" onclick="location.href='front_login.jsp'" class="list-group-item external">登录/注册 </a>
                 </c:if>
             </div>
             <!-- hero -->
@@ -63,21 +59,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<ul class="heronav right hidden-xs">
 					<li><a href="#result-view">成绩查询</a></li>
 					<li><a href="#register">考试报名</a></li>
-					<c:if test="${sessionScope.frontUser != null}">
+					<c:if test="${!empty sessionScope.frontUser}">
 						<li><a href="#personal-center" style="text-transform: none;">${sessionScope.frontUser.username}，你好！</a></li>
 						<li><a href="javascript:;" onclick="logout();" style="color: red;">[退出]</a></li>
 					</c:if>
-					<c:if test="${sessionScope.frontUser == null}">
-						<li><a href="front_login.jsp">登录/注册</a></li>
+					<c:if test="${empty sessionScope.frontUser}">
+						<li><a href="javascript:;" onclick="location.href='front_login.jsp'">登录/注册</a></li>
 					</c:if>
 				</ul>
 				<h1><img src="img/logo/logo.png" height="50" alt="logo name"></h1>
                 <h1 class="page-title">圆一个大学梦</h1>
                 <h4 class="page-sub-title">工作不易,你需要一个本科 
-						<br>
-							想改变现状，想要储备不同行业证书，其实就是差一个本科证书。
-						</h4>
-                <div class="showcase">	<a class="btn btn-warning btn-lg hidden-xs" href="#about">了解更多 &nbsp;&nbsp;<i class="fa fa-play"></i></a>
+				<br>
+					想改变现状，想要储备不同行业证书，其实就是差一个本科证书。
+				</h4>
+                <div class="showcase">	
+                	<a class="btn btn-warning btn-lg hidden-xs" href="#about">了解更多 &nbsp;&nbsp;<i class="fa fa-play"></i></a>
                     <a class="btn btn-warning btn-sm visible-xs" href="#about">了解更多 &nbsp;&nbsp;<i class="fa fa-play"></i></a>
                 </div>
             </div>
@@ -90,7 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <div class="row">
                     <div class="col-sm-3 col-md-4">
                         <div class="logo">
-                            <a href="front/index.jsp">
+                            <a href="#">
                                 <img src="img/logo/logo.png" height="40" alt="logo name" />
                             </a>
                         </div>
@@ -108,12 +105,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                 </li>
                                 <li><a href="#register">考试报名</a>
                                 </li>
-                                <c:if test="${sessionScope.frontUser != null}">
+                                <c:if test="${!empty sessionScope.frontUser}">
 				                	<li><a href="#personal-center" style="text-transform: none;">${sessionScope.frontUser.username}，你好！</a></li>
 				               		<li><a href="javascript:;" onclick="logout();" style="color: red;">[退出]</a></li>
 				                </c:if>
-				               	<c:if test="${sessionScope.frontUser == null}">
-				                	<li><a href="front_login.jsp">登录/注册 </a></li>
+				               	<c:if test="${empty sessionScope.frontUser}">
+				                	<li><a href="javascript:;" onclick="location.href='front_login.jsp'">登录/注册 </a></li>
 				                </c:if>
                             </ul>
                         </nav>
@@ -135,10 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </div>
                 <div class="divide20"></div>
                 <div class="row">
-                    <div class="col-md-12 about" style="text-align: left;text-indent: 2em;">
-                        <p>蚌埠学院是一所以工学学科为主，工学、文学、理学、管理学、经济学、教育学多学科协调发展的教学型普通本科院校。成人教育学院是负责统筹、协调、组织和管理全院成人高等学历教育和非学历教育培训的二级机构。下设办公室、教务科、学籍科、教研室和继教办五个科室。
-                        <p>蚌埠学院成人教育学院办学时间长，师资力量强，开设专业全，管理科学规范。经过二十几年的不断探索和发展，初步形成了高等学历教育和非学历教育并举的办学体系和发展格局。目前，高等学历教育在籍学员近2000人，既有本院举办的专科函授、业余和脱产教育，又有与安徽师范大学联合举办的本科函授教育；此外还与安徽师范大学、合肥工业大学、安徽大学、安徽财经大学、安徽工程科技学院等名校联合举办的高等教育自学考试（二学历）本科教育。我院的成人学历教育有函授、业余、脱产教育多形式，本科、专科多层次，主办、联办多渠道的特点，为社会培养和输送了大量的各类专业技术人才，在社会上享有较高的声誉。非学历教育也面向社会开展了多种多样的培训业务，培训项目主要有：“计算机数字图形图像应用技术等级证书”、“职业指导人员”等多种资格证书的培训考证。
-					</div>
+                    <div class="col-md-12 about" style="text-align: left;" id="aboutIntro"></div>
                 </div>
             </div>
             <div class="divide40"></div>
@@ -150,49 +144,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</h2>
                 <div id="mycarousel" class="carousel slide">
                     <!-- indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#mycarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#mycarousel" data-slide-to="1"></li>
-                        <li data-target="#mycarousel" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <div class="container">
-                                <div class="carousel-caption">
-                                    <div class="row">
-                                        <div class="circular col-md-6" >
-                                            <img src="front/img/testimonials/1.jpg" alt="headshot #1" />
-                                            <h3>自学考试</h3>
-                                            <p style="text-align: left;text-indent: 2em;">近年来，成人教育学院特别注重成人高等教育学科建设、专业建设和成人教育改革与发展的规律、趋势和政策法规的研究，在成人教育的常规管理、专业建设、教学研究等方面都取得了一定的成就。在常规管理上，注重建立健全各项规章制度，并与各站（函授站）点（教学点）密切合作，推行规范化、制度化、科学化、人性化管理
-                                        </div>
-                                        <div class="circular col-md-6">
-                                            <img src="front/img/testimonials/2.jpg" alt="headshot #2" />
-                                            <h3>成人考试</h3>
-                                            <p style="text-align: left;text-indent: 2em;">　面对新的机遇和新的挑战，成人教育学院将在蚌埠学院党委的正确领导下，依托学院的丰富教学资源，以质量求生存，以改革促发展，在教学计划、课程设置、师资队伍等方面，切实加强建设和管理，确保我院成人高等教育专业的人才培养规格和质量，争取把学院的成人教育工作推上一个新台阶。
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="container">
-                                <div class="carousel-caption">
-                                    <div class="row">
-                                        <div class="circular col-md-6">
-                                            <img src="front/img/testimonials/3.jpg" alt="headshot #3" />
-                                            <h3>远程、函授</h3>
-                                            <p style="text-align: left;text-indent: 2em;">招生工作围绕学院“地方性、应用型、工程化”的办学定位，紧密联系地方经济和社会发展的实际，主动适应“实基础、适口径、重应用、强素质”的应用型人才培养规格定位，积极拓宽发展空间。努力开拓工作新局面。
-                                        </div>
-                                        <div class="circular col-md-6">
-                                            <img src="front/img/testimonials/4.jpg" alt="headshot #4" />
-                                            <h3>特色专业</h3>
-                                            <p style="text-align: left;text-indent: 2em;"> 蚌埠学院是一所以工为主，工学、文学、理学、管理学、经济学、教育学多学科协调发展的应用型普通本科院校。学院的成人高等学历教育由其继续教育学院全面负责。我院成人高等教育办学时间长，师资力量强，开设专业全，管理科学规范。二十多年来已有数万名成教毕业生从这里走向社会，成为社会各个行业的优秀人才和中坚力量。
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <a class="left carousel-control" href="#mycarousel" data-slide="prev"><span class="fa fa-chevron-left fa-2x"></span></a>
+                    <ol class="carousel-indicators" id="aboutIndi"></ol>
+                    <div class="carousel-inner" id="aboutFeat"></div> 
+                    <a class="left carousel-control" href="#mycarousel" data-slide="prev"><span class="fa fa-chevron-left fa-2x"></span></a>
                     <a class="right carousel-control" href="#mycarousel" data-slide="next"><span class="fa fa-chevron-right fa-2x"></span></a>
                 </div>
                 <div class="divide85"></div>
@@ -203,9 +157,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="divide40"></div>
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="text-center">
-								<span class="bigintro">专业一览</span>
-								</h2>
+                    <h2 class="text-center"><span class="bigintro">专业一览</span></h2>
                 </div>
             </div>
             <div class="divide60"></div>
@@ -230,88 +182,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </div>
             <div class="divide40"></div>
             <div class="container">
-                <div id="filter-items" class="row">
-                    <div class="col xs-12 col-sm-4 design item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/1.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，中国大学共有12个学科，中国大学共有12个学科，中国大学共有12个学科，61个大学专业类506个大学专业学专业类506个大学专业学专业类506个大学专业学专业类506个大学专业学专业类</p>	
-                                <a href="front/img/gallery/1.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 videos item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/2.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/2.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 banners item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/3.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/3.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 videos item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/4.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/4.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 design item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/5.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/5.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 banners item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/6.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/6.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 banners item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/7.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/7.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col xs-12 col-sm-4 videos item">
-                        <div class="filter-content">
-                            <img src="front/img/gallery/8.jpg" alt="" class="img-responsive" />
-                            <div class="image-content">
-                                <h4>专业名称</h4>
-                                <p class="hidden-xs hidden-sm text-height">中国大学共有12个学科，61个大学专业类，506个大学专业。</p>	
-                                <a href="front/img/gallery/8.jpg" class="btn btn-sm btn-warning colorbox-button">了解更多</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div id="filter-items" class="row"></div>
             </div>
             <div class="divide60"></div>
         </section>
@@ -327,54 +198,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     </div>
                 </div>
                 <div class="divide60"></div>
-                <div class="row">
-                    <div class="col-md-3 col-sm-6">
-                        <div class="feature">	<i class="extralarge fa fa-bar-chart-o"></i>
-                            <br/>
-                            <br/>
-                            <h3>新生须知</h3>
-                            <br/>
-                            <p> 经省教育厅招生考试院批准，你被录取为我院2017级函授、业余学员，向你表示祝贺！现将新生报到事项告知如下，请你按规定时间办理报到手续，逾期一周无故不报到者，视为放弃入学资格。
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="feature">	<i class="extralarge fa fa-video-camera"></i>
-                            <br/>
-                            <br/>
-                            <h3>申报通知</h3>
-                            <br/>
-                            <p> 根据《蚌埠学院成人高等教育本科毕业生学士学位授予细则》，成绩合格且符合相关条件的成人高等教育本科毕业生可向学校提出学士学位授予申请。  请各相关负责人认真对待，届时请督促学员材料按时送达，配合完成此项工作。
-                          </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="feature">	<i class="extralarge fa fa-bullhorn"></i>
-                            <br/>
-                            <br/>
-                            <h3>管理制度</h3>
-                            <br/>
-                            <p>对于在整个学习过程中出勤率高、成绩达到优秀、关心集体、对班级做出贡献者，毕业时按学生人数的10%比例评选优秀毕业生，颁发证书。 学生在籍期间，不遵守纪律，违反规章制度，扰乱社会治安或触犯国家法律者，视情节轻重，分别给予警告、严重警告、记过、留校察看、开除学籍处分。开除学籍须经学院院长办公会研究决定并报安徽省教育厅备案。
-						</div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="feature">	<i class="extralarge fa fa-picture-o"></i>
-                            <br/>
-                            <br/>
-                            <h3>执行办法</h3>
-                            <br/>
-                            <p>为了加强成人高等教育工作的管理，促使学院成人高等教育工作规范化、制度化，根据《安徽省普通高等学校成人高等教育工作规定》（教高〔2009〕4号）、《关于加强高校举办非学历教育管理的通知》（教高〔2009〕10号）文件精神，结合学院实际，制定本办法。本办法所称成人高等教育系指成人高等学历教育和继续教育、各类培训、进修和自考助学辅导等形式的成人非学历教育。
-						</div>
-                    </div>
-                </div>
+                <div class="row" id="noticeCont"></div>
                 <div class="divide60"></div>
             </div>
         </section>
         <!-- 成绩查询-->
        	<section id="result-view" data-type="background" data-speed="10" class="pages text-center" style="height: 100px!important;">
-            <!-- <div class="parallax-overlay text-center">
-                <h2 class="text-center">
-					<span class="bigintro-light">部分案例</span>
-				</h2>
-            </div> -->
         </section>
         <!-- 查询 -->
         <section id="signup-again" class="color-primary pattern text-center">
@@ -394,28 +223,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										aria-expanded="false">
 										报考专业 <span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu pull-left" id="majorQueryList">
-										<li><a href="javascript:;">电子信息科学</a></li>
-										<li><a href="javascript:;">会计</a></li>
-										<li><a href="javascript:;">市场营销</a></li>
-										<li><a href="javascript:;">工商管理</a></li>
-									</ul>
+									<ul class="dropdown-menu pull-left" id="majorQueryList"></ul>
 								</div>
 								<input type="text" class="form-control" id="major">
 							</div><br />
-							<button type="button" class="btn btn-warning pull-right">查询</button>
+							<button type="button" class="btn btn-warning pull-right" onclick="queryResults();">查询</button>
 					</div>
 					
 					<div class="col-md-6 col-md-push-1">
 						<div class="panel panel-default">
 							<div class="panel-heading"><b>查询结果</b></div>
-							<div class="panel-body text-danger" id="noResults"><p>没有查到任何数据……</p></div>
-							<table class="table table-striped text-primary text-left" id="results">
-							  <!-- <tr class="text-center"><th>课&emsp;&emsp;程</th><th>成&emsp;&emsp;绩</th></tr>
-							  <tr class="info"><td>理论知ytery识</td><td>100</td></tr>
-							  <tr class="info"><td>理论</td><td>100</td></tr>
-							  <tr class="info"><td>理论知识</td><td>100</td></tr> -->
-							</table>
+							<div class="panel-body text-danger" id="noResults" style="display: none;"><p>没有查到任何数据……</p></div>
+							<table class="table table-striped text-primary text-left" id="results"></table>
 						</div>
 					</div>
 					
@@ -498,45 +317,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							  <button type="button" class="btn btn-default dropdown-toggle exam-width" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							    <span id="regMajorName">选择专业 </span> <span class="caret"></span>
 							  </button>
-							  <ul class="dropdown-menu exam-width" id="majorRegList">
-							    <li><a href="javascript:;">计算机科学与技术 </a></li>
-							    <li><a href="javascript:;">网络工程</a></li>
-							    <li><a href="javascript:;">文学艺术鉴赏</a></li>
-							    <li><a href="javascript:;">会计</a></li>
-							  </ul>
+							  <ul class="dropdown-menu exam-width" id="majorRegList"></ul>
 							</div>
 							<div class="divide20"></div>
-							<div class="list-group exam-info">
-						      <a href="javascript:;" class="list-group-item">
-						        <p class="list-group-item-text">时间：xxxxxxx</p>
-						        <p class="list-group-item-text">内容：xxxxxxx</p>
-						        <p class="list-group-item-text">地点：xxxxxxx</p>
-						      </a>
-						      <a href="javascript:;" class="list-group-item">
-						        <h4 class="list-group-item-heading">考试课程</h4>
-						        <p class="list-group-item-text">考场：xxxxxxx</p>
-						        <p class="list-group-item-text">时间：xxxxxxx</p>
-						        <p class="list-group-item-text">注意事项：xxxxxxx</p>
-						      </a>
-						      <a href="javascript:;" class="list-group-item">
-						        <h4 class="list-group-item-heading">考试课程</h4>
-						        <p class="list-group-item-text">考场：xxxxxxx</p>
-						        <p class="list-group-item-text">时间：xxxxxxx</p>
-						        <p class="list-group-item-text">注意事项：xxxxxxx</p>
-						      </a>
-						      <a href="javascript:;" class="list-group-item">
-						        <h4 class="list-group-item-heading">考试课程</h4>
-						        <p class="list-group-item-text">考场：xxxxxxx</p>
-						        <p class="list-group-item-text">时间：xxxxxxx</p>
-						        <p class="list-group-item-text">注意事项：xxxxxxx</p>
-						      </a>
-						      <a href="javascript:;" class="list-group-item">
-						        <h4 class="list-group-item-heading">考试课程</h4>
-						        <p class="list-group-item-text">考场：xxxxxxx</p>
-						        <p class="list-group-item-text">时间：xxxxxxx</p>
-						        <p class="list-group-item-text">注意事项：xxxxxxx</p>
-						      </a>
-						    </div>
+							<div class="list-group exam-info"></div>
 						    
 						    <div class="col-md-6 col-md-offset-3 form-submit">
                                 <button id="submit" class="btn btn-warning btn-lg" type="button">报名提交</button>
@@ -597,10 +381,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
     
     <!--/page -->
-    <!-- javascripts -->
-    <!-- placed at the end of the document so the pages load faster -->
     <script src="js/jquery/jquery-2.0.3.min.js"></script>
-    <script src="front/bootstrap-dist/js/bootstrap.min.js"></script>
+    <script src="bootstrap-dist/js/bootstrap.min.js"></script>
     <script src="front/js/waypoint/waypoints.min.js"></script>
     <script src="front/js/navmaster/jquery.scrollTo.js"></script>
     <script src="front/js/navmaster/jquery.nav.js"></script>
@@ -613,14 +395,59 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script src="js/layer/laydate/laydate.js"></script>
     <script src="js/jquery.serializeJSON.js"></script>
     <script>
-   		var majorArr = $.ajax({url:"getMajors.do",async:false}).responseJSON;
-   		var html = "";
+    	var allData = $.ajax({url:"getHomeData.do",async:false}).responseJSON;
+    	
+    	$("#aboutIntro").empty();
+    	var aboutIntroHtml = allData.aboutIntro.replace(/[ ]/g,"&nbsp;").replace("\n","<p>");
+   		$("#aboutIntro").append(aboutIntroHtml);
+    	
+    	var aboutFeat = allData.aboutFeat;
+    	var aboutIndiHtml = "";
+    	for(var i = 0; i < aboutFeat.length/2; i++)
+    		aboutIndiHtml += "<li data-target='#mycarousel' data-slide-to='" + i + "' " + (i == 0 ? "class='active'" : "") + "></li>";
+   		$("#aboutIndi").empty();
+   		$("#aboutIndi").append(aboutIndiHtml);
+    	
+   		var aboutFeatHtml = "";
+   		for(var i = 0; i < aboutFeat.length; i++) {
+          	var temp = "<div class='circular col-md-6'><img src='" + aboutFeat[i].image + "'/><h3>" + aboutFeat[i].title + "</h3><p style='text-align: left;text-indent: 2em;'>" + aboutFeat[i].cont + "</div>";
+	   		if(i % 2 == 0) aboutFeatHtml += "<div class='item " + (i == 0 ? 'active' : '') + "'><div class='container'><div class='carousel-caption'><div class='row'>" + temp + (i == aboutFeat.length-1 ? "</div></div></div></div>" : "");
+	      	if(i % 2 != 0) aboutFeatHtml += temp + "</div></div></div></div>";
+   		}
+   		$("#aboutFeat").empty();
+   		$("#aboutFeat").append(aboutFeatHtml);
+    	
+   		var majors = allData.majors;
+    	var majorsHtml = "";
+    	for(var i = 0; i < majors.length; i++) {
+    		var type = majors[i].type;
+    		var temp = type==1 ? "design" : (type==2 ? "videos" : (type==3 ? "banners" : ""));
+    		majorsHtml += "<div class='col xs-12 col-sm-4 " + temp + " item'><div class='filter-content'><img src='" + majors[i].image + "' class='img-responsive'/>"
+ 	           	+ "<div class='image-content'><h4>" + majors[i].name + "</h4><p class='hidden-xs hidden-sm text-height'>" + majors[i].remark + "</p>"
+ 	           	+ "<a href='" + majors[i].image + "' class='btn btn-sm btn-warning colorbox-button'>了解更多</a></div></div></div>";
+    	}
+    	$("#filter-items").empty();
+   		$("#filter-items").append(majorsHtml);
+    	
+    	
+   		var notices = allData.notices;
+    	var noticesHtml = "";
+    	var icons = ['fa-picture-o','fa-bullhorn','fa-video-camera','fa-bar-chart-o','fa-video-camera'];
+    	for(var i = 0; i < notices.length; i++) {
+    		noticesHtml += "<div class='col-md-3 col-sm-6'><div class='feature'><i class='extralarge fa " + icons[parseInt(5*Math.random())] 
+    			+ "'></i><br/><br/><h3>" + notices[i].title + "</h3><br/><p>" + notices[i].cont + "</div></div>";
+    	}
+    	$("#noticeCont").empty();
+   		$("#noticeCont").append(noticesHtml);
+    	
+   		var majorArr = allData.majorData;
+   		var majorDataHtml = "";
    		for(var key in majorArr)
-   			  html += "<li><a href='javascript:;'>" + majorArr[key] + "</a></li>";
+   			majorDataHtml += "<li><a href='javascript:;'>" + majorArr[key] + "</a></li>";
    		$("#majorQueryList").empty();
-   		$("#majorQueryList").append(html);
+   		$("#majorQueryList").append(majorDataHtml);
    		$("#majorRegList").empty();
-   		$("#majorRegList").append(html);
+   		$("#majorRegList").append(majorDataHtml);
     
 	    $("#majorQueryList").find("a").click(function() {
 	    	$("#major").val($(this).text());
@@ -640,12 +467,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						var examArr = result.data;
 						var examHtml = "";
 						for(var i = 0; i < examArr.length; i++) {
-							examHtml += "<a href='javascript:;' class='list-group-item'>";
+							examHtml += "<a href='javascript:;' class='list-group-item'><input type='hidden' value='" + examArr[i]['id'] + "'>";
 							examHtml += "<p class='list-group-item-text'>时间：" + examArr[i]['examTime'] + "</p>";
 							examHtml += "<p class='list-group-item-text'>内容：" + examArr[i]['cont'] + "</p>";
 							examHtml += "<p class='list-group-item-text'>地点：" + (examArr[i]['address'] == undefined ? '无': examArr[i]['address']) + "</p>";
 							examHtml += "</a>";
 						}
+						if(examHtml.length == 0) examHtml += "<h4><b class='text-danger'>该专业暂无考试信息……</b></h4>";
 						$('.list-group.exam-info').empty();
 						$('.list-group.exam-info').append(examHtml);
 						
@@ -656,6 +484,63 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					}
 				}
 	    	});
+	    });
+	    
+	    var queryResults = function() {
+	    	var major = $('#major').val().trim();
+	    	if(major.length == 0) {
+	    		layer.msg("请先选择专业",{icon:0,time:800});
+	    		return false;
+	    	}
+	    	layer.load(0, {content:"<div style='margin-left:60px;width:150px;font-size:15px;'>成绩查询中...</div>"});
+	    	$.ajax({
+				contentType : "application/json; charset=utf-8",
+				type : "post",
+				url : "front/getResults.do",
+				data : JSON.stringify({userId: "${sessionScope.frontUser.id}", major: major}),
+				dataType : "json",
+				success : function(result) {
+					if(result.success) {
+						layer.closeAll();
+						var res = result.data;
+						if(res.length > 0) {
+							$('#noResults').hide();
+							var resultsHtml = "<tr class='text-center'><th>课&emsp;&emsp;程</th><th>成&emsp;&emsp;绩</th></tr>";
+							for(var i = 0; i < res.length; i++)	
+								resultsHtml += "<tr class='info'><td>" + res[i].course + "</td><td>" + res[i].score + "</td></tr>"
+							$('#results').empty();
+							$('#results').append(resultsHtml);
+						} else $('#noResults').show();
+					} else layer.msg(result.msg,{icon:2,time:1500});
+				},
+				error : function(xhr) {
+					if (xhr.responseText == "loseSession")
+						layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "front_login.jsp";});
+				}
+			});
+	    };
+	    
+	    $("#submit").click(function() {
+	    	var examId = $('.exam-info a.active').find('input').val();
+	    	if(examId) {
+	    		$.ajax({
+					contentType : "application/json; charset=utf-8",
+					type : "post",
+					url : "front/regExam.do",
+					data : JSON.stringify({"userId": "${sessionScope.frontUser.id}", "examId": examId}),
+					dataType : "json",
+					success : function(result) {
+						if(result.success && result.code == "0000") layer.alert(result.msg,{icon:1});
+						else layer.msg(result.msg,{icon:2,time:1500});
+					},
+					error : function(xhr) {
+						if (xhr.responseText == "loseSession")
+							layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "front_login.jsp";});
+					}
+				});
+	    		
+	    		
+	    	} else layer.alert("请先选择考试",{icon:0});
 	    });
 	    
 	    var logout = function() {
@@ -726,15 +611,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					if (result.success)
 						if(result.code == "0000") {
 							$("#passModal").modal("hide");
-							alert("密码修改成功，请重新登录");
-							top.location.href = "front_login.jsp";
+							layer.confirm("密码修改成功，请重新登录", {icon : 1,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "front_login.jsp";});
 						} else if(result.code == "0004") showWarn(result.msg);
 					else showWarn('密码修改失败！');
 				},
 				error : function(xhr) {
 					if (xhr.responseText == "loseSession") {
-						alert("请先登录");
-						top.location.href = "front_login.jsp";
+						layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "front_login.jsp";});
 					}
 				}
 			});

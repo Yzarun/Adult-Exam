@@ -13,4 +13,6 @@ public interface NoticeService {
 	public Result queryPage(JSONObject jsonObj);
 	
 	public Result delete(JSONObject jsonObj);
+	
+	public Result getList(JSONObject jsonObj);
 }

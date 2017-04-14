@@ -27,4 +27,12 @@
 	<delete id="delete" parameterType="object">
 		DELETE FROM _results WHERE id = #{id} 
 	</delete>
+	
+	<select id="selectResults" resultType="JSONObject" parameterType="JSONObject">
+		SELECT * FROM _results WHERE registrationId IN 
+		(SELECT id FROM _registration WHERE userId = #{userId} AND status=1 AND examId IN 
+			(SELECT id FROM _exam WHERE majorId IN (SELECT id FROM _major WHERE name = #{major}))
+		)
+	</select>
+	
 </mapper>

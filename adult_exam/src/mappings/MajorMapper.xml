@@ -11,8 +11,8 @@
 			<if test="createTime != null and searchOper == 'lt'"><![CDATA[ AND m.createTime <= #{createTime} ]]></if>
 	</select>
 	<insert id="insert" parameterType="map" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO _major(name,createTime,manager,remark) 
-		VALUES(#{name},NOW(),#{manager},#{remark})
+		INSERT INTO _major(name,type,createTime,manager,remark) 
+		VALUES(#{name},#{type},NOW(),#{manager},#{remark})
 	</insert>
 	
 	<update id="update" parameterType="map">
@@ -20,6 +20,7 @@
 		<if test="name != null">,name = #{name}</if>
 		<if test="remark != null">,remark = #{remark}</if>
 		<if test="image != null">,image = #{image}</if>
+		<if test="type != null">,type = #{type}</if>
 		WHERE id = #{id}
 	</update>
 	<delete id="delete" parameterType="object">

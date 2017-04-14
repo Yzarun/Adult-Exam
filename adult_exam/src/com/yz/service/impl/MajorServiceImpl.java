@@ -40,6 +40,7 @@ public class MajorServiceImpl implements MajorService {
 	public Result insert(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
+			if(jsonObj.get("type") == null) jsonObj.put("type", 0);
 			majorDAO.insert(jsonObj);
 			result.setData(jsonObj.get("id"));
 		} catch (Exception e) {
@@ -77,7 +78,7 @@ public class MajorServiceImpl implements MajorService {
 	}
 
 	@Override
-	public Result getList() {
+	public Result getMajorName() {
 		Result result = new Result();
 		try {
 			List<JSONObject> list = majorDAO.selectList(new JSONObject());
@@ -93,4 +94,17 @@ public class MajorServiceImpl implements MajorService {
 		return result;
 	}
 
+	@Override
+	public Result getList(JSONObject jsonObj) {
+		Result result = new Result();
+		try {
+			result.setData(majorDAO.selectList(jsonObj));
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMsg("系统内部错误");
+		}
+		return result;
+	}
+	
 }

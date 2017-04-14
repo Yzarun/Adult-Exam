@@ -11,8 +11,6 @@
     <script src="js/bootstrap-daterangepicker/daterangepicker.min.js"></script>
     <!-- SLIMSCROLL -->
     <script src="js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
-    <!-- SLIMSCROLL -->
-    <script src="js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
     <script src="js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"></script>
     <!-- BLOCK UI -->
     <script src="js/jQuery-BlockUI/jquery.blockUI.min.js"></script>
@@ -27,6 +25,7 @@
     <script src="js/jquery-todo/js/paddystodolist.js"></script>
     <!-- TIMEAGO -->
     <script src="js/timeago/jquery.timeago.min.js"></script>
+
     
 <div class="row">
     <div class="col-sm-12">

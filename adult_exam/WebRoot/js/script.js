@@ -1222,7 +1222,7 @@ var App = function () {
 	/*-----------------------------------------------------------------------------------*/
 	/*	jqGrid
 	/*-----------------------------------------------------------------------------------*/
-	var ajaxFileUpload = function(id, fileId, type) {
+	var ajaxFileUpload = function(id, fileId, type, tabId) {
 		$.ajaxFileUpload({
             url: 'uploadFile.do?type=' + type + '&id=' + id,
             secureuri: false,
@@ -1233,10 +1233,21 @@ var App = function () {
             	if(result.code == "0005" || !result.success) {
             		layer.closeAll();
             		layer.alert(result.msg,{icon:5});
-            	}
+            	} else $("#" + tabId).trigger("reloadGrid");
             }
 		 });
 	};
+	var showImage = function(cellvalue, options){
+		if(!cellvalue) cellvalue = "uploadfile/no_img.jpg";
+		return "<img src='" + cellvalue + "' height='80' width='80' />";
+	};
+	var dateDataInit = function(e) {
+		$(e).focus(function() {
+			laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});
+			$('#laydate_hms').show();
+		});
+	};
+	
 	var handleJqgridAbout = function () {
 		jQuery("#aboutTab").jqGrid({
 			jsonReader: {
@@ -1250,12 +1261,12 @@ var App = function () {
 			colNames: ['编号', '标题', '内容详情', '创建时间', '创建者', '图片'],
 			colModel: [
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
-		           {name:'id',index: 'id',width: 20, hidden:true, searchoptions:{sopt:['eq']}}, 
-		           {name:'title',index: 'title',width: 100,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
-		           {name:'cont',index:'cont', width: 150,sortable: false,editable: true,edittype:'textarea',search: false},
-		           {name:'createTime',index: 'createTime',width: 80,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+		           {name:'id',index: 'id',width: 30, searchoptions:{sopt:['eq']}}, 
+		           {name:'title',index: 'title',width: 80,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
+		           {name:'cont',index:'cont', width: 300,sortable: false,editable: true,edittype:'textarea',search: false},
+		           {name:'createTime',index: 'createTime',width: 80,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},//
 		           {name:'managerName',index: 'managerName',width: 50,sortable: false, search: false},
-		           {name:'image',index:'image',sortable: false, search: false, editable: true, edittype:'file',editoptions:{enctype:"multipart/form-data"},formoptions:{elmsuffix:'（请上传图片文件）'}}
+		           {name:'image',index:'image',align:'center', sortable: false, search: false, editable: true, formatter:showImage, edittype:'file',editoptions:{enctype:"multipart/form-data"},formoptions:{elmsuffix:'（请上传图片文件）'}}
 			],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1272,20 +1283,25 @@ var App = function () {
 		});
 		jQuery("#aboutTab").jqGrid('navGrid', "#aboutTabNav", {view:true, edit: true, add:true, del: true},
 				{
+				recreateForm: true,
+			 	reloadAfterSubmit: false,  
 				afterSubmit: function(xhr, data) {
 					if(xhr.responseText == "loseSession") loginTips();
 					else {
 						var status = xhr.responseJSON.success;
-						ajaxFileUpload(data.id, 'image', 1);
+						if($("#image").val().length == 0) $("#aboutTab").trigger("reloadGrid");
+						else ajaxFileUpload(data.id, 'image', 1, "aboutTab");
 						return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
 					}
 				},closeAfterEdit: true
 			},{
+				reloadAfterSubmit: false,
 				afterSubmit: function(xhr) {
 					if(xhr.responseText == "loseSession") loginTips();
 					else {
 						var status = xhr.responseJSON.success;
-						ajaxFileUpload(xhr.responseJSON.data, 'image', 1);
+						if($("#image").val().length == 0) $("#aboutTab").trigger("reloadGrid");
+						else ajaxFileUpload(xhr.responseJSON.data, 'image', 1, "aboutTab");
 						return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
 					}
 				},closeAfterAdd: true
@@ -1317,7 +1333,7 @@ var App = function () {
 				{name:'id',index: 'id',width: 20, hidden:true, searchoptions:{sopt:['eq']}}, 
 				{name:'title',index: 'title',width: 100,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
 				{name:'cont',index:'cont', width: 150,sortable: false,editable: true,edittype:'textarea', search: false},
-				{name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+				{name:'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},//
 				{name:'managerName',index: 'managerName',width: 50,sortable: false, search: false}
 				],
 				rowNum: 10,
@@ -1372,15 +1388,17 @@ var App = function () {
 			datatype: "json",
 			height: 300,
 			loadui: "block",
-			colNames: ['编号', '名称', '创建时间', '创建者', '简介'],
+			colNames: ['编号', '名称', '类型', '简介', '图片', '创建时间', '创建者'],
 			colModel: [
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
-		           {name: 'id',index: 'id',width: 20, hidden:false, searchoptions:{sopt:['eq']}}, 
+		           {name: 'id',index: 'id',width: 30, hidden:false, searchoptions:{sopt:['eq']}}, 
 		           {name: 'name',index: 'name',width: 80,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
-		           {name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+		           {name: 'type',index: 'type',width: 30,editable: true, edittype:'select',editoptions:{value:'0:默　认;1:热　门;2:最　新;3:传　统'},stype:'select',searchoptions:{sopt:['eq'],value:'0:默　认;1:热　门;2:最　新;3:传　统'},formatter:function(cellvalue) {var showName="默　认";if(cellvalue == 1) showName="热　门";if(cellvalue == 2) showName="最　新";if(cellvalue == 3) showName="传　统";return showName;}}, 
+		           {name: 'remark',index: 'remark',width: 150,sortable: false,editable: true,edittype:'textarea', search: false},
+		           {name:'image',index:'image',align:'center', sortable: false, search: false, editable: true, formatter:showImage, edittype:'file',editoptions:{enctype:"multipart/form-data"},formoptions:{elmsuffix:'（请上传图片文件）'}},
+		           {name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},//
 		           {name: 'managerName',index: 'managerName',width: 50,sortable: false, search: false}, 
-		           {name: 'remark',index: 'remark',width: 150,sortable: false,editable: true,edittype:'textarea', search: false}
-			],
+		    ],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
 			pager: '#majorTabNav',
@@ -1396,18 +1414,25 @@ var App = function () {
 		});
 		jQuery("#majorTab").jqGrid('navGrid', "#majorTabNav", {view:true, edit: true, add:true, del: true}, 
 				{
-					afterSubmit: function(xhr) {
+					recreateForm: true,
+					reloadAfterSubmit: false,  
+					afterSubmit: function(xhr, data) {
 						if(xhr.responseText == "loseSession") loginTips();
 						else {
 							var status = xhr.responseJSON.success;
+							if($("#image").val().length == 0) $("#majorTab").trigger("reloadGrid");
+							else ajaxFileUpload(data.id, 'image', 2, "majorTab");
 							return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
 						}
 					},closeAfterEdit: true
 				},{
+					reloadAfterSubmit: false,  
 					afterSubmit: function(xhr) {
 						if(xhr.responseText == "loseSession") loginTips();
 						else {
 							var status = xhr.responseJSON.success;
+							if($("#image").val().length == 0) $("#majorTab").trigger("reloadGrid");
+							else ajaxFileUpload(xhr.responseJSON.data, 'image', 2, "majorTab");
 							return [status, status ? layer.msg("添加成功",{icon:1,time:1000}) : "添加失败"];
 						}
 					},closeAfterAdd: true
@@ -1435,15 +1460,16 @@ var App = function () {
 			datatype: "json",
 			height: 300,
 			loadui: "block",
-			colNames: ['编号', '用户名', '姓名', '考试内容', '状态', '报名时间', '考试成绩'],
+			colNames: ['编号','考试编号', '用户名', '姓名', '考试内容', '状态', '报名时间', '考试成绩'],
 			colModel: [
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
-		           {name: 'id',index: 'id', hidden:true, searchoptions:{sopt:['eq']}}, 
-		           {name: 'username',index: 'username',width: 50, hidden:false, searchoptions:{sopt:['eq']}}, 
-		           {name: 'name',index: 'name',width: 50,editable: true, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
+		           {name: 'id',index: 'id', hidden:true}, 
+		           {name: 'examNum',index: 'examNum', width: 50, searchoptions:{sopt:['eq']}}, 
+		           {name: 'username',index: 'username',width: 30, editable:false, searchoptions:{sopt:['eq']}}, 
+		           {name: 'name',index: 'name',width: 30,editable: false, editrules:{required: true},searchoptions:{sopt:['cn']}}, 
 		           {name: 'cont',index: 'cont',width: 80,searchoptions:{sopt:['cn']}}, 
-		           {name: 'status',index: 'status',width: 20,sortable: false, search: false}, 
-		           {name: 'applyTime',index: 'applyTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+		           {name: 'status',index: 'status',width: 50,editable: true,edittype:'select',editoptions:{value:'0:已报名;1:审核通过;2:审核不通过'},stype:'select',searchoptions:{sopt:['eq'],value:'0:已报名;1:审核通过;2:审核不通过'},formatter:function(cellvalue) {return cellvalue==0 ? "已报名" : (cellvalue==1 ? "审核通过" : "审核不通过");}}, 
+		           {name: 'applyTime',index: 'applyTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},//
 		           {name: 'results',index: 'results',width: 150,sortable: false,editable: true, search: false}
 			],
 			rowNum: 10,
@@ -1489,9 +1515,9 @@ var App = function () {
 		           {name:'id',index: 'id',width: 25, hidden:false, searchoptions:{sopt:['eq']}}, 
 		           {name:'cont',index:'cont', width: 80,sortable: false,editable: true,editrules:{required: true},search: false},
 		           {name:'address',index:'address', width: 80,sortable: false,editable: true,editrules:{required: true},search: false},
-		           {name:'examTime',index: 'examTime',width: 60,editable: true, editrules:{required: true},editoptions:{dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},
+		           {name:'examTime',index: 'examTime',width: 60,editable: true, editrules:{required: true},editoptions:{dataInit: dateDataInit}, searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},
 		           {name:'majorId',index:'majorId', width: 50,sortable: false,editable: true, editrules:{required: true}, edittype:'select',editoptions:{value:majorData},stype:'select', searchoptions:{sopt:['eq'],value:majorData},formatter:function(cellvalue){return majorData[cellvalue];}},//},
-		           {name:'createTime',index: 'createTime',width: 60,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}},//
+		           {name:'createTime',index: 'createTime',width: 60,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},//
 		           {name:'managerName',index: 'managerName',width: 30,sortable: false, search: false}
 			],
 			rowNum: 10,
@@ -1570,7 +1596,7 @@ var App = function () {
 					{name: 'gender',index: 'gender',width: 20,editable: true, edittype:'select',editoptions:{value:'1:男;0:女'},stype:'select',searchoptions:{sopt:['eq'],value:'1:男;0:女'},formatter:function(cellvalue){return cellvalue==0?"女":(cellvalue==1?"男":"未知");}}, 
 					{name: 'birthdate',index: 'birthdate', width: 50, editable: true, editoptions:{dataInit: function(e) {setTimeout(function(){laydate({elem:'#'+$(e).attr('id')});},2);}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {setTimeout(function(){laydate({elem:'#'+$(e).attr('id')});},2);}},formatter:function(cellvalue){return cellvalue ? (cellvalue.split(" "))[0] : "";}},//
 					{name: 'status',index: 'status',width: 20,editable: true, editrules:{required: true},edittype:'select',editoptions:{value:'1:启用;0:禁用'},searchoptions:{sopt:['eq']},formatter:function(cellvalue){return cellvalue==1?"启用":"禁用";}}, 
-					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}}
+					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}}
 		    ],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1617,7 +1643,7 @@ var App = function () {
 					{name: 'gender',index: 'gender',width: 20,editable: true, edittype:'select',editoptions:{value:'1:男;0:女'},stype:'select',searchoptions:{sopt:['eq'],value:'1:男;0:女'},formatter:function(cellvalue){return cellvalue==0?"女":(cellvalue==1?"男":"未知");}}, 
 					{name: 'birthdate',index: 'birthdate', width: 50, editable: true, editoptions:{dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD'});});}}, searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD'});});}},formatter:function(cellvalue){return cellvalue ? (cellvalue.split(" "))[0] : "";}},//
 					{name: 'status',index: 'status',width: 20,editable: true, editrules:{required: true},edittype:'select',editoptions:{value:'1:启用;0:禁用'},searchoptions:{sopt:['eq']},formatter:function(cellvalue){return cellvalue==1?"启用":"禁用";}}, 
-					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: function(e) {$(e).focus(function(){laydate({elem:'#'+$(e).attr('id'),format: 'YYYY-MM-DD hh:mm:ss'});$('#laydate_hms').show();});}}}
+					{name: 'createTime',index: 'createTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}}
 				],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],

@@ -98,7 +98,7 @@ public class AboutUsServiceImpl implements AboutUsService {
 	}
 
 	@Override
-	public Result getAbout(JSONObject jsonObj) {
+	public Result getAbout1(JSONObject jsonObj) {
 		Result result = new Result();
 		try {
 			List<JSONObject> list = aboutUsDAO.selectList(jsonObj);
@@ -112,4 +112,16 @@ public class AboutUsServiceImpl implements AboutUsService {
 		return result;
 	}
 
+	@Override
+	public Result getAbout0(JSONObject jsonObj) {
+		Result result = new Result();
+		try {
+			result.setData(aboutUsDAO.selectList(jsonObj));
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setMsg("系统内部错误");
+		}
+		return result;
+	}
 }

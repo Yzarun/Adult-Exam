@@ -14,5 +14,7 @@ public interface MajorService {
 	
 	public Result delete(Object obj);
 	
-	public Result getList();
+	public Result getMajorName();
+	
+	public Result getList(JSONObject jsonObj);
 }
