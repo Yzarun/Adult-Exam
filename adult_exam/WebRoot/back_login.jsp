@@ -20,7 +20,7 @@
 <body>
     <div class="signin">
         <div class="signin-head">
-            <img src="img/test/head_120.png" alt="" class="img-circle">
+            <img src="img/avatars/avatar2.jpg" width="120px" height="120px" class="img-circle">
         </div>
         <form id="form" class="form-signin" role="form" method="post">
             <input type="text" class="form-control" placeholder="用户名" id="username" name="username" required autofocus />

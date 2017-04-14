@@ -54,7 +54,7 @@
                         <div class="panel-left red"> <i class="fa fa-users fa-2x"></i>
                         </div>
                         <div class="panel-right">
-                            <div class="number">6718</div>
+                            <div class="number" id="userCount">5</div>
                             <div class="title">用户量</div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="panel-left blue"> <i class="fa fa-book fa-2x"></i>
                         </div>
                         <div class="panel-right">
-                            <div class="number">2724</div>
+                            <div class="number" id="majorCount">10</div>
                             <div class="title">专业</div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         <div class="panel-left blue"> <i class="fa fa-tasks fa-2x"></i>
                         </div>
                         <div class="panel-right">
-                            <div class="number">2724</div>
+                            <div class="number" id="examCount">12</div>
                             <div class="title">考试</div>
                         </div>
                     </div>
@@ -164,6 +164,6 @@
     </div>
 </div>    
 <script>
-	
+$('#dash_pie_1').attr('data-percent',45)
 
 </script>

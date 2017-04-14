@@ -114,7 +114,9 @@
                                 </div>
                                 <div>
                                     <label class="checkbox">
-                                        <input type="checkbox" class="uniform" value="" id="agree">我同意  <a href="#">服务条款</a> 和 <a href="#">隐私政策</a>
+                                        <input type="checkbox" class="uniform" value="" id="agree">我同意  
+                                        <a href="javascript:;" onclick="layer.tips('这是服务条款！这是服务条款！这是服务条款！这是服务条款！这是服务条款！这是服务条款！这是服务条款！这是服务条款！这是服务条款！',this,{tips:[1]});">服务条款</a> 和
+                                        <a href="javascript:;" onclick="layer.tips('这是隐私政策！这是隐私政策！这是隐私政策！这是隐私政策！这是隐私政策！这是隐私政策！这是隐私政策！……',this,{tips:[1]});">隐私政策</a>
                                     </label>
                                     <button type="button" class="btn btn-success" id="registerSubmit">注册</button>
                                 </div>
