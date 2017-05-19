@@ -25,7 +25,7 @@
 		WHERE id = #{id}
 	</update>
 	<delete id="delete" parameterType="object">
-		DELETE FROM _results WHERE id = #{id} 
+		DELETE FROM _results WHERE id IN (#{ids}) 
 	</delete>
 	
 	<select id="selectResults" resultType="JSONObject" parameterType="JSONObject">
@@ -35,4 +35,7 @@
 		)
 	</select>
 	
+	<select id="selectResultsByReg" resultType="JSONObject" parameterType="long">
+		SELECT * FROM _results WHERE registrationId = #{regId}
+	</select>
 </mapper>

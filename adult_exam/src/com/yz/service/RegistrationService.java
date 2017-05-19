@@ -13,4 +13,6 @@ public interface RegistrationService {
 	public Result queryPage(JSONObject jsonObj);
 	
 	public Result delete(JSONObject jsonObj);
+	
+	public Result getInfoPage(JSONObject jsonObj);
 }

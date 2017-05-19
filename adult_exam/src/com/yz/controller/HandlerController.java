@@ -254,6 +254,22 @@ public class HandlerController {
 		return allData;
 	}
 	
+	@RequestMapping(value = "getRegInfoPage")
+	@ResponseBody
+	public JSON getRegInfoPage(HttpServletRequest request) {
+		return registrationService.getInfoPage(Utilities.getReqJSONObject(request)).dataToJSON();
+	}
 	
+	@RequestMapping(value = "getResultsByReg")
+	@ResponseBody
+	public JSON getResultsByReg(Long regId) {
+		return resultsService.getResultsByReg(regId).dataToJSON();
+	}
+	
+	@RequestMapping(value = "operaResults")
+	@ResponseBody
+	public JSON operaResults(HttpServletRequest request) {
+		return resultsService.operaResults(Utilities.getReqJSONObject(request)).toJSON();
+	}
 	
 }

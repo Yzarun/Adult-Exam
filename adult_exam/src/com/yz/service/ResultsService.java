@@ -10,9 +10,11 @@ public interface ResultsService {
 	
 	public Result update(JSONObject jsonObj);
 	
-	public Result queryPage(JSONObject jsonObj);
-	
 	public Result delete(JSONObject jsonObj);
 	
 	public Result getResults(JSONObject jsonObj);
+	
+	public Result operaResults(JSONObject jsonObj);
+	
+	public Result getResultsByReg(Long regId);
 }

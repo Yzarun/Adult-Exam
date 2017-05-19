@@ -30,4 +30,18 @@
 	<delete id="delete" parameterType="object">
 		DELETE FROM _registration WHERE id = #{id} 
 	</delete>
+	<select id="selectOne" parameterType="object" resultType="JSONObject">
+		SELECT * FROM _registration WHERE id = #{id} 
+	</select>
+	
+	<select id="queryRegInfo" parameterType="JSONObject" resultType="JSONObject">
+		SELECT r.id,r.examNum,u.name AS studentName,e.cont,e.examTime,(SELECT name FROM _major WHERE id=r.examId) AS majorName,
+		IF((SELECT COUNT(id) FROM _results WHERE registrationId=r.id)=0,'未录入','已录入') AS statusName 
+		FROM _registration r LEFT JOIN _users u ON r.userId=u.id LEFT JOIN _exam e ON r.examId=e.id WHERE r.status=1 
+		<if test="status == 1">AND (SELECT COUNT(id) FROM _results WHERE registrationId=r.id)>0</if>
+		<if test="status == 2">AND (SELECT COUNT(id) FROM _results WHERE registrationId=r.id)=0</if>
+		<if test="studentName != null">AND u.name LIKE '%${studentName}%'</if>
+		ORDER BY e.examTime
+	</select>
+	
 </mapper>

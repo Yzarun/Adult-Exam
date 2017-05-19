@@ -207,9 +207,9 @@
                         </ul>
                     </li>
                     <li><a class="" href="javascript:;" onclick="toPage('major', 'jqgrid_major');"><i class="fa fa-th-large fa-fw"></i> <span class="menu-text">专业设置</span></a>
-                    <li><a class="" href="javascript:;" onclick="toPage('examinee', 'jqgrid_examinee');"><i class="fa fa-users fa-fw"></i> <span class="menu-text">考生管理</span></a>
                     <li><a class="" href="javascript:;" onclick="toPage('exam', 'jqgrid_exam');"><i class="fa fa-bar-chart-o fa-fw"></i> <span class="menu-text">考试管理</span></a>
-                   
+                    <li><a class="" href="javascript:;" onclick="toPage('examinee', 'jqgrid_examinee');"><i class="fa fa-users fa-fw"></i> <span class="menu-text">考生管理</span></a>
+                    <li><a class="" href="javascript:;" onclick="toPage('results', 'results');"><i class="fa fa-list-ol fa-fw"></i> <span class="menu-text">成绩管理</span></a>
                     <li class="has-sub">
                         <a href="javascript:;" class=""> <i class="fa fa-pencil-square-o fa-fw"></i>  <span class="menu-text">用户管理</span>
                             <span class="arrow"></span>

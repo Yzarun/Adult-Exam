@@ -10,4 +10,8 @@ import com.yz.dao.common.MyBatisDao;
 public interface ResultsDAO extends CommonDAO {
 
 	public List<JSONObject> selectResults(JSONObject jsonObj);
+	
+	public List<JSONObject> selectResultsByReg(Long regId);
+	
+	
 }

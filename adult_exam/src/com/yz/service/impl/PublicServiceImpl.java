@@ -48,8 +48,7 @@ public class PublicServiceImpl implements PublicService {
 				result.setData(data);
 				title = "【成人自考网站系统】注册验证";
 				content = "欢迎加 \"成人自考网站\"，注册验证码：<b>" + randomCode + "</b><p>如非本人操作，请忽略此邮件。";
-			}
-			if(type == 1) {//密码重置
+			} else if(type == 1) {//密码重置
 				String randomCode = StringUtil.randomCode(6);
 				title = "【成人自考网站系统】密码重置";
 				JSONObject params = new JSONObject();
@@ -60,6 +59,9 @@ public class PublicServiceImpl implements PublicService {
 				params.put("id", user.get("id"));
 				params.put("password", MD5Util.encrypt(randomCode));
 				usersDAO.update(params);
+			} else if(type == 2) {// 报名审核结果通知
+				title = "【成人自考网站系统】考试报名审核通知";
+				content = jsonObj.getString("content");
 			}
 			SendMail.send(title, content, address);
 			result.setMsg("邮件发送成功");

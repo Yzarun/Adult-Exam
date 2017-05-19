@@ -89,62 +89,7 @@ $("#majorRegList").find("a").click(function() {
 	});
 });
 
-var queryResults = function() {
-	var major = $('#major').val().trim();
-	if(major.length == 0) {
-		layer.msg("请先选择专业",{icon:0,time:800});
-		return false;
-	}
-	layer.load(0, {content:"<div style='margin-left:60px;width:150px;font-size:15px;'>成绩查询中...</div>"});
-	$.ajax({
-		contentType : "application/json; charset=utf-8",
-		type : "post",
-		url : "front/getResults.do",
-		data : JSON.stringify({userId: "${sessionScope.frontUser.id}", major: major}),
-		dataType : "json",
-		success : function(result) {
-			if(result.success) {
-				layer.closeAll();
-				var res = result.data;
-				if(res.length > 0) {
-					$('#noResults').hide();
-					var resultsHtml = "<tr class='text-center'><th>课&emsp;&emsp;程</th><th>成&emsp;&emsp;绩</th></tr>";
-					for(var i = 0; i < res.length; i++)	
-						resultsHtml += "<tr class='info'><td>" + res[i].course + "</td><td>" + res[i].score + "</td></tr>"
-					$('#results').empty();
-					$('#results').append(resultsHtml);
-				} else $('#noResults').show();
-			} else layer.msg(result.msg,{icon:2,time:1500});
-		},
-		error : function(xhr) {
-			if (xhr.responseText == "loseSession")
-				layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "front_login.jsp";});
-		}
-	});
-};
-
-$("#submit").click(function() {
-	var examId = $('.exam-info a.active').find('input').val();
-	if(examId) {
-		$.ajax({
-			contentType : "application/json; charset=utf-8",
-			type : "post",
-			url : "front/regExam.do",
-			data : JSON.stringify({"userId": "${sessionScope.frontUser.id}", "examId": examId}),
-			dataType : "json",
-			success : function(result) {
-				if(result.success && result.code == "0000") layer.alert(result.msg,{icon:1});
-				else layer.msg(result.msg,{icon:2,time:1500});
-			},
-			error : function(xhr) {
-				if (xhr.responseText == "loseSession")
-					layer.confirm("你还没有登录，请先登录", {icon : 2,title : "提示",closeBtn : 0,btn : [ '确定' ]}, function() {top.location.href = "front_login.jsp";});
-			}
-		});
-		
-		
-	} else layer.alert("请先选择考试",{icon:0});
-});
+//TODO
 
 var logout = function() {
 	$.ajax({url:"logout.do?type=0",async:false});

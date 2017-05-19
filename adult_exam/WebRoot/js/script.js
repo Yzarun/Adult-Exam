@@ -1332,7 +1332,7 @@ var App = function () {
 			datatype: "json",
 			height: 300,
 			loadui: "block",
-			colNames: ['编号','考试编号', '用户名', '姓名', '考试内容', '状态', '报名时间', '考试成绩'],
+			colNames: ['编号','考试编号', '用户名', '姓名', '考试内容', '状态', '报名时间', '备注说明'],
 			colModel: [
 					//['eq'等于,'ne不等','lt小于','le小于等于','gt大于','ge大于等于','bw'开始于,'bn'不开始于,'in'属于,'ni'不属于,'ew'结束于,'en'不结束于,'cn'包含,'nc'不包含]
 		           {name: 'id',index: 'id', hidden:true}, 
@@ -1342,7 +1342,7 @@ var App = function () {
 		           {name: 'cont',index: 'cont',width: 80,searchoptions:{sopt:['cn']}}, 
 		           {name: 'status',index: 'status',width: 50,editable: true,edittype:'select',editoptions:{value:'0:已报名;1:审核通过;2:审核不通过'},stype:'select',searchoptions:{sopt:['eq'],value:'0:已报名;1:审核通过;2:审核不通过'},formatter:function(cellvalue) {return cellvalue==0 ? "已报名" : (cellvalue==1 ? "审核通过" : "审核不通过");}}, 
 		           {name: 'applyTime',index: 'applyTime',width: 50,searchoptions:{sopt:['lt','gt'],dataInit: dateDataInit}},//
-		           {name: 'results',index: 'results',width: 150,sortable: false,editable: true, search: false}
+		           {name: 'remark',index: 'remark',width: 150,sortable: false,editable: true, search: false}
 			],
 			rowNum: 10,
 			rowList: [10, 20, 30, 50],
@@ -1357,16 +1357,23 @@ var App = function () {
 				if(xhr.responseText == "loseSession") loginTips();
 			}
 		});
-		jQuery("#examineeTab").jqGrid('navGrid', "#examineeTabNav", {view:true, edit: true, add:false, del: false},
-				{
-					afterSubmit: function(xhr) {
-						if(xhr.responseText == "loseSession") loginTips();
-						else {
-							var status = xhr.responseJSON.success;
-							return [status, status ? layer.msg("修改成功",{icon:1,time:1000}) : "修改失败"];
-						}
-					},closeAfterEdit: true
-				},{},{},{closeAfterSearch:true}
+		jQuery("#examineeTab").jqGrid('navGrid', "#examineeTabNav", {view:true, edit: true, add:false, del: false,
+				editfunc:function(rowid) {
+					var rec = $('#examineeTab').jqGrid('getRowData', rowid);
+					if(rec.status != "已报名") layer.alert("该考生已审核，不能重复操作",{icon:0});
+					else {
+						$('#examineeTab').jqGrid('editGridRow', rowid, {
+							afterSubmit: function(xhr) {
+								if(xhr.responseText == "loseSession") loginTips();
+								else {
+									var res = xhr.responseJSON;
+									return [res.success, res.success ? layer.msg(res.msg,{icon:1,time:1000}) : res.msg];
+								}
+							},closeAfterEdit: true
+						});
+					}
+				}
+			},{},{},{closeAfterSearch:true}
 		);
 		$('.navtable .ui-pg-button').tooltip({container:'body'});
 	};
@@ -1399,7 +1406,7 @@ var App = function () {
 			viewrecords: true,
 			sortorder: "asc",
 			editurl: "back/exam/insertUpdateDelete.do",
-			caption: "考试信息列表",
+			caption: "考试信息列表&nbsp;<small>（<em>除考试地点，其它信息添加后，不允许修改</em>）</small>",
 			autowidth: true,
 			loadError: function(xhr) {
 				if(xhr.responseText == "loseSession") loginTips();
@@ -2341,6 +2348,9 @@ var App = function () {
 			}
 			if (App.isPage("jqgrid_exam")) {
 				handleJqgridExam();	//Function to display jqGrid
+			}
+			if (App.isPage("results")) {
+				
 			}
 			if (App.isPage("jqgrid_users0")) {
 				handleJqgridUsers0();	//Function to display jqGrid
